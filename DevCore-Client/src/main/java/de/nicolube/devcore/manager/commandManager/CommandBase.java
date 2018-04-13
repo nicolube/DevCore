@@ -1,4 +1,4 @@
-package de.nicolube.devcore.manager.command.bases;
+package de.nicolube.devcore.manager.commandManager;
 
 import java.util.List;
 import java.util.Map;

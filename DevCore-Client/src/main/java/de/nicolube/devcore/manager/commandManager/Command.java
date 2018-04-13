@@ -1,7 +1,6 @@
-package de.nicolube.devcore.manager.command.bases;
+package de.nicolube.devcore.manager.commandManager;
 
 import de.nicolube.devcore.Main;
-import de.nicolube.devcore.manager.command.CommandManager;
 import de.nicolube.devcore.utils.PlayerMessage;
 import java.util.ArrayList;
 import java.util.Arrays;

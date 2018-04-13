@@ -1,10 +1,6 @@
-package de.nicolube.devcore.manager.command;
+package de.nicolube.devcore.manager.commandManager;
 
 import de.nicolube.devcore.ModuleBase;
-import de.nicolube.devcore.manager.command.bases.Command;
-import de.nicolube.devcore.manager.command.bases.CommandBase;
-import de.nicolube.devcore.manager.command.bases.CommandHolder;
-import de.nicolube.devcore.manager.command.bases.SubCommand;
 import de.nicolube.devcore.utils.PlayerMessage;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.lang.reflect.Field;
