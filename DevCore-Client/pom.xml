@@ -67,13 +67,5 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!--Spigot Server Wrapper-->
-        <dependency>
-            <groupId>org.bukkit.</groupId>
-            <artifactId>bukkit</artifactId>
-            <scope>system</scope>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <systemPath>${basedir}\..\lib\spigot-1.8.8.jar</systemPath>
-        </dependency>
     </dependencies>
 </project>
