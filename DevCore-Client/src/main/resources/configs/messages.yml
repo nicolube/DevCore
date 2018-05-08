@@ -1,0 +1,23 @@
+chatPrefixes:
+    chat: "&8[&6Chat&8] &8» &7"
+    money: "&8[&6Money&8] &8» &7"
+    system: "&8[&6System&8] &8» &7"
+    plot: "&8[&6Plot&8] &8» &7"
+    coins: "&8[&6Coins&8] &8» &7"
+    ping: "&8[&6Ping&8] &8» &7"
+    msg: "&8[&6Msg&8] &8» &7"
+    tpa: "&8[&6Tpa&8] &8» &7"
+    online: "&8[&6Online&8] &8» &7"
+    pay: "&8[&6Pay&8] &8» &7"
+noPermission: "Dazu hast du keine Rechte!"
+player:
+    notFound: "Spieler nicht gefunden!"
+    
+command:
+    helpHeader: 
+    - "&2-------------&aHelp&2-------------"
+    - "&aHilfe für den Befehl: &c{command}"
+    help: "&2{command} &7 | &a{description}"
+    helpFooter:
+    - "&2------------------------------"
+        

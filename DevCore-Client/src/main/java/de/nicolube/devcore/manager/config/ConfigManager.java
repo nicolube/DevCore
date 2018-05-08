@@ -16,6 +16,7 @@
  */
 package de.nicolube.devcore.manager.config;
 
+import de.nicolube.devcore.LoadClass;
 import de.nicolube.devcore.ModuleBase;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,7 +33,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  *
  * @author Nico Lube
  */
-public final class ConfigManager extends ModuleBase {
+public final class ConfigManager extends ModuleBase implements LoadClass {
     
     private final Map<String, BaseHolder> configList = new HashMap<>();
     private final File configFolder;
@@ -42,6 +43,11 @@ public final class ConfigManager extends ModuleBase {
         setupConfigs();
         
         addConfig("messages");
+    }
+
+    @Override
+    public void load() {
+        reload();
     }
 
     public FileConfiguration getConfig(String configName) {

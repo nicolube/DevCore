@@ -16,37 +16,33 @@
  */
 package de.nicolube.devcore;
 
-
-import de.nicolube.devcore.utils.Scheduler.Scheduler;
+import de.nicolube.devcore.manager.commandManager.CommandManager;
 import de.nicolube.devcore.utils.SystemMessage;
-import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
+import java.util.HashMap;
+import org.bukkit.plugin.Plugin;
 
 /**
  *
  * @author Nico Lube
  */
-public abstract class ModuleBase {
-    
-    public static Main plugin;
-    public static Server server;
-    public static Scheduler scheduler;
-    public static FileConfiguration messages;
+public class DevCore {
+    private static HashMap<String, CorePlugin> pluginList;
     
     static {
-        SystemMessage.INFO.send("First load of ModulBase:");
-        loadBase();
+        pluginList = new HashMap<>();
     }
     
-    public static void loadBase() {
-        SystemMessage.INFO.send("Loading BaseModule");
-        plugin = Main.getPlugin();
-        server = plugin.getServer();
-        scheduler = plugin.getScheduler();
-        messages = plugin.getConfigManager().getConfig("messages");
+    public static void onDisable() {
+            pluginList.clear();
     }
     
+    public static void registerPlugin(Plugin plugin) {
+        String name = plugin.getName();
+        SystemMessage.INFO.send("Registered plugin: "+name);
+        pluginList.put(name, new CorePlugin());
+    }
     
-    
-    
+    public static CommandManager getCommandManager() {
+        return Main.getPlugin().getCommandManager();
+    }
 }

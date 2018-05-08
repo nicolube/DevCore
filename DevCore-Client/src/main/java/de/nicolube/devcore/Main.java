@@ -16,6 +16,7 @@
  */
 package de.nicolube.devcore;
 
+import de.nicolube.devcore.manager.commandManager.CommandManager;
 import de.nicolube.devcore.manager.config.ConfigManager;
 import de.nicolube.devcore.utils.SystemMessage;
 import de.nicolube.devcore.utils.Scheduler.Scheduler;
@@ -30,6 +31,7 @@ public class Main extends JavaPlugin {
     private static Main plugin;
     private Scheduler scheduler;
     private ConfigManager configManager;
+    private CommandManager commandManager;
 
     @Override
     public void onEnable() {
@@ -45,6 +47,9 @@ public class Main extends JavaPlugin {
         SystemMessage.INFO.send("Starting ConfigManager");
         this.configManager = new ConfigManager(getDataFolder());
         
+        SystemMessage.INFO.send("Starting CommandManager");        
+        this.commandManager = new CommandManager();
+        
         
     }
 
@@ -52,13 +57,14 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         super.onDisable();
         scheduler.onDisable();
+        DevCore.onDisable();
     }
 
     public static Main getPlugin() {
         return plugin;
     }
 
-    private final void logInfoStart() {
+    private void logInfoStart() {
         SystemMessage.INFO.send("=======================<>======================");
         SystemMessage.INFO.send("");
         SystemMessage.INFO.send("=============<DevCore by nicolube>=============");
@@ -75,5 +81,10 @@ public class Main extends JavaPlugin {
     public ConfigManager getConfigManager() {
         return configManager;
     }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+    
     
 }

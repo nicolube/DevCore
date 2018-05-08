@@ -1,5 +1,6 @@
 package de.nicolube.devcore.manager.commandManager;
 
+import de.nicolube.devcore.LoadClass;
 import de.nicolube.devcore.ModuleBase;
 import de.nicolube.devcore.utils.PlayerMessage;
 import de.nicolube.devcore.utils.SystemMessage;
@@ -10,8 +11,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 
-public class CommandManager extends ModuleBase {
+public class CommandManager extends ModuleBase implements LoadClass {
 
     private final Map<String, Command> commandsMap = new HashMap<>();
 
@@ -19,21 +21,24 @@ public class CommandManager extends ModuleBase {
         SystemMessage.INFO.send("Start the CommandManager");
         Command.setManager(this);
         SubCommand.setManager(this);
-
+    }
+    
+    @Override
+    public void load() {
+        commandsMap.forEach((n, c) -> c.onEnable());
     }
 
-    public void addCommandHolder(CommandHolder holder) {
-        SystemMessage.DEBUG.send("CommandManager - add holder: "+holder.getClass().getSimpleName());
-        holder.getCommandList().forEach((n, c) -> addCommand(c));
+    public void addCommandHolder(Plugin plugin, CommandHolder holder) {
+        SystemMessage.DEBUG.send("CommandManager - add holder: " + holder.getClass().getSimpleName());
+        holder.getCommandList().forEach((n, c) -> addCommand(plugin, c));
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             holder.onEnable();
         }, 1);
     }
 
-    public void addCommand(Command command) {
-        SystemMessage.DEBUG.send("CommandManager - add command: "+command.getName());
-        commandsMap.put(command.getName(), command);
+    public void addCommand(Plugin plugin, Command command) {
+        SystemMessage.DEBUG.send("CommandManager - add command: " + command.getName());
         try {
             final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
@@ -52,7 +57,8 @@ public class CommandManager extends ModuleBase {
                 }
             });
             f.set(commandMap, cmds);
-            commandMap.register("DevCore", command);
+            commandMap.register(plugin.getName().toLowerCase(), command);
+            commandsMap.put(command.getName(), command);
             command.onEnable();
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
             e.printStackTrace();
@@ -83,5 +89,4 @@ public class CommandManager extends ModuleBase {
     public FileConfiguration getMessages() {
         return messages;
     }
-
 }

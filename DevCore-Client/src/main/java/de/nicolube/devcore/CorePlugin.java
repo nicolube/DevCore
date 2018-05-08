@@ -16,37 +16,35 @@
  */
 package de.nicolube.devcore;
 
-
-import de.nicolube.devcore.utils.Scheduler.Scheduler;
-import de.nicolube.devcore.utils.SystemMessage;
-import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
+import java.util.ArrayList;
 
 /**
  *
  * @author Nico Lube
  */
-public abstract class ModuleBase {
-    
-    public static Main plugin;
-    public static Server server;
-    public static Scheduler scheduler;
-    public static FileConfiguration messages;
-    
-    static {
-        SystemMessage.INFO.send("First load of ModulBase:");
-        loadBase();
+public class CorePlugin {
+
+    private final ArrayList<ModuleBase> registeredModules;
+    private final ArrayList<LoadClass> registeredLoadClasses;
+
+    public CorePlugin() {
+        registeredModules = new ArrayList<>();
+        registeredLoadClasses = new ArrayList<>();
+    }
+
+    public void addModule(ModuleBase module) {
+        registeredModules.add(module);
+    }
+
+    public void addLoadClass(LoadClass loadClass) {
+        registeredLoadClasses.add(loadClass);
     }
     
-    public static void loadBase() {
-        SystemMessage.INFO.send("Loading BaseModule");
-        plugin = Main.getPlugin();
-        server = plugin.getServer();
-        scheduler = plugin.getScheduler();
-        messages = plugin.getConfigManager().getConfig("messages");
+    public void load() {
+        registeredModules.forEach(m -> {
+            if (m instanceof LoadClass) 
+                ((LoadClass) m).load();
+        });
+        registeredLoadClasses.forEach(lc -> lc.load());
     }
-    
-    
-    
-    
 }
