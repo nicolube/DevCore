@@ -16,7 +16,7 @@
  */
 package de.nicolube.devcore.utils;
 
-import de.nicolube.devcore.ModuleBase;
+import de.nicolube.devcore.Main;
 
 /**
  *
@@ -35,7 +35,7 @@ public enum SystemMessage {
     private String prefix;
     
     private SystemMessage() {
-        this.prefix = "["+ModuleBase.plugin.getName()+"] ["+name()+"] ";
+        this.prefix = "["+Main.getPlugin().getName()+"] ["+name()+"] ";
     }
     
     public void send(String message) {

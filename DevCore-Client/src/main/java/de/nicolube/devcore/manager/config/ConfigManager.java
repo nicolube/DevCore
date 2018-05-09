@@ -17,6 +17,7 @@
 package de.nicolube.devcore.manager.config;
 
 import de.nicolube.devcore.LoadClass;
+import de.nicolube.devcore.Main;
 import de.nicolube.devcore.ModuleBase;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +34,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  *
  * @author Nico Lube
  */
-public final class ConfigManager extends ModuleBase implements LoadClass {
+public final class ConfigManager implements LoadClass {
     
     private final Map<String, BaseHolder> configList = new HashMap<>();
     private final File configFolder;
@@ -97,7 +98,7 @@ public final class ConfigManager extends ModuleBase implements LoadClass {
         if (!c.getFile().exists()) {
             try {
                 FileOutputStream out = new FileOutputStream(c.getFile());
-                URL url = plugin.getClass().getResource("/configs/" + c.getName() + "." + c.getFileEnding());
+                URL url = Main.getPlugin().getClass().getResource("/configs/" + c.getName() + "." + c.getFileEnding());
                 if (url == null) {
                     return;
                 }
