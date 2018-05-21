@@ -1,5 +1,6 @@
 package de.nicolube.devcore.scoreboard;
 
+import de.nicolube.devcore.Main;
 import de.nicolube.devcore.utils.Reflector;
 import net.minecraft.server.v1_8_R3.IScoreboardCriteria;
 import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardDisplayObjective;
@@ -18,12 +19,14 @@ public final class Scoreboard {
     private String[] oldContent;
     private final net.minecraft.server.v1_8_R3.Scoreboard board;
     private final ScoreboardObjective objective;
+    private final ScoreBoardUpdater scoreboardUpdater;
 
     public Scoreboard(Player player, String titel, String[] content) {
         this.player = player;
         this.content = content.clone();
         this.board = new net.minecraft.server.v1_8_R3.Scoreboard();
         this.objective = board.registerObjective("board", IScoreboardCriteria.c);
+        this.scoreboardUpdater = Main.getPlugin().getScoreboards().getNewScoreBoardUpdater(player);
         objective.setDisplayName(titel);
         
         final PacketPlayOutScoreboardObjective objectivPacket = new PacketPlayOutScoreboardObjective(objective, 0);
@@ -36,11 +39,11 @@ public final class Scoreboard {
     }
 
     protected void update() {
+        scoreboardUpdater.update();
         update(oldContent);
     }
 
     private void update(String[] oldList) {
-        String rank = PermissionsEx.getUser(player).getPrefix();
         String[] currentContent = content.clone();
         for (int i = 0; i < currentContent.length; i++) {
             String string = currentContent[i];
@@ -57,7 +60,7 @@ public final class Scoreboard {
                 }
             }
             */
-            string = string.replace("{rank}", rank);
+            string = scoreboardUpdater.replace(string);
             string = ChatColor.translateAlternateColorCodes('&', string);
             currentContent[i] = string;
             if (string.equals(oldList[i])) {

@@ -3,9 +3,12 @@ package de.nicolube.devcore.scoreboard;
 import de.nicolube.devcore.LoadClass;
 import de.nicolube.devcore.Main;
 import de.nicolube.devcore.utils.SystemMessage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -21,6 +24,7 @@ public class Scoreboards implements Listener, LoadClass {
     private String[] content;
     private String titel;
     private FileConfiguration config;
+    private Class<? extends ScoreBoardUpdater> scoreBoardUpdater;
 
     public Scoreboards() {
         load();
@@ -74,4 +78,26 @@ public class Scoreboards implements Listener, LoadClass {
         scoreboards.get(uuid).update();
     }
 
+    public void setScoreBoardUpdater(Class<? extends ScoreBoardUpdater> scoreBoardUpdater) {
+        this.scoreBoardUpdater = scoreBoardUpdater;
+    }
+
+    public ScoreBoardUpdater getNewScoreBoardUpdater(Player player) {
+        try {
+            return scoreBoardUpdater.getConstructor(Player.class).newInstance(new Object[]{player});
+        } catch (InstantiationException ex) {
+            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

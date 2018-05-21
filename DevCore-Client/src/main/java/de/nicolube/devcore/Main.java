@@ -94,4 +94,10 @@ public class Main extends JavaPlugin {
     public CommandManager getCommandManager() {
         return commandManager;
     }
+
+    public Scoreboards getScoreboards() {
+        return scoreboards;
+    }
+    
+    
 }
