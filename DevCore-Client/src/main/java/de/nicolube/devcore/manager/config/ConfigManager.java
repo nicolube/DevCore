@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
@@ -37,10 +38,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 public final class ConfigManager implements LoadClass {
     
     private final Map<String, BaseHolder> configList = new HashMap<>();
-    private final File configFolder;
+    private final JavaPlugin plugin;
 
-    public ConfigManager(File configFolder) {
-        this.configFolder = configFolder;
+    public ConfigManager(JavaPlugin plugin) {
+        
+        this.plugin = plugin;
         setupConfigs();
         
         addConfig("messages");
@@ -65,8 +67,8 @@ public final class ConfigManager implements LoadClass {
     }
 
     private void setupConfigs() {
-        if (!configFolder.exists()) {
-            configFolder.mkdir();
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdir();
         }
         configList.forEach((s, c) -> {
             setupBase(c);
@@ -98,7 +100,7 @@ public final class ConfigManager implements LoadClass {
         if (!c.getFile().exists()) {
             try {
                 FileOutputStream out = new FileOutputStream(c.getFile());
-                URL url = Main.getPlugin().getClass().getResource("/configs/" + c.getName() + "." + c.getFileEnding());
+                URL url = plugin.getClass().getResource("/configs/" + c.getName() + "." + c.getFileEnding());
                 if (url == null) {
                     return;
                 }
@@ -122,7 +124,7 @@ public final class ConfigManager implements LoadClass {
     }
 
     public File getConfigFolder() {
-        return configFolder;
+        return plugin.getDataFolder();
     }
 
     public void reload() {

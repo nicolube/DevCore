@@ -21,7 +21,6 @@ public abstract class Command extends BukkitCommand implements CommandBase {
     private final String permission;
     private final String advanceName;
     //public final Util util;
-    public FileConfiguration messages;
     private Main plugin;
 
     public Command(String name, String description, String usageMessage, String[] aliases, String permission) {
@@ -29,12 +28,11 @@ public abstract class Command extends BukkitCommand implements CommandBase {
         this.plugin = Main.getPlugin();
         this.permission = permission;
         this.advanceName = ("/" + name);
-        //this.util = Main.getPlugin().getUtils();
+        manager = Main.getPlugin().getCommandManager();
     }
 
     @Override
     public void onEnable() {
-        messages = manager.getMessages();
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             subCommands.forEach((n, c) -> c.onEnable());
         }, 1);
@@ -112,7 +110,7 @@ public abstract class Command extends BukkitCommand implements CommandBase {
             }
             oldCompleter = currentCompleter;
         }
-        return getDefaultComplets(args[args.length]);
+        return getDefaultComplets(args[args.length-1]);
     }
 
     @Override

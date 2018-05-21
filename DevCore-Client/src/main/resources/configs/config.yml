@@ -1,0 +1,5 @@
+scoreboard:
+    titel: "&cThis is Yours"
+    content:
+        - "&eYour Rank"
+        - "&6{rank}"

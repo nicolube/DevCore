@@ -19,8 +19,6 @@ public class CommandManager extends ModuleBase implements LoadClass {
 
     public void CommandManager() {
         SystemMessage.INFO.send("Start the CommandManager");
-        Command.setManager(this);
-        SubCommand.setManager(this);
     }
     
     @Override

@@ -64,4 +64,16 @@ public enum PlayerMessage {
     public void sendNoPerm(CommandSender sender) {
         send(sender, ModuleBase.messages.getString("noPermission", "&4You do not have permission for that!"));
     }
+    
+    public void sendPlayerNotOnline(CommandSender sender) {
+        send(sender, ModuleBase.messages.getString("player.notOnline", "&4This player is not online!"));
+    }
+    
+    public void sendPlayerNotFound(CommandSender sender) {
+        send(sender, ModuleBase.messages.getString("player.notFound", "&4This player not found!"));
+    }
+    
+     public void sendNotAPlayer(CommandSender sender) {
+        send(sender, "You are not a player!");
+    }
 }

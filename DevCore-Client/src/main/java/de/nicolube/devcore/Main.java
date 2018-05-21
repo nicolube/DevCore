@@ -18,6 +18,8 @@ package de.nicolube.devcore;
 
 import de.nicolube.devcore.manager.commandManager.CommandManager;
 import de.nicolube.devcore.manager.config.ConfigManager;
+import de.nicolube.devcore.scoreboard.Scoreboards;
+import de.nicolube.devcore.scoreboard.Tablist;
 import de.nicolube.devcore.utils.SystemMessage;
 import de.nicolube.devcore.utils.Scheduler.Scheduler;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,25 +34,32 @@ public class Main extends JavaPlugin {
     private Scheduler scheduler;
     private ConfigManager configManager;
     private CommandManager commandManager;
+    private Scoreboards scoreboards;
+    private Tablist tablist;
 
     @Override
     public void onEnable() {
         super.onEnable();
         this.plugin = this;
 
-        SystemMessage.setLogLevel(SystemMessage.DEBUG);
+        SystemMessage.setLogLevel(SystemMessage.NORMAL);
         logInfoStart();
 
         SystemMessage.INFO.send("Starting Scheduler");
         this.scheduler = new Scheduler();
         
         SystemMessage.INFO.send("Starting ConfigManager");
-        this.configManager = new ConfigManager(getDataFolder());
+        this.configManager = new ConfigManager(this);
+        this.configManager.addConfig("config");
         
         SystemMessage.INFO.send("Starting CommandManager");        
         this.commandManager = new CommandManager();
         
+        SystemMessage.INFO.send("Starting Scorebaords");    
+        this.scoreboards = new Scoreboards();
         
+        SystemMessage.INFO.send("Starting TabList");    
+        this.tablist = new Tablist();
     }
 
     @Override
@@ -85,6 +94,4 @@ public class Main extends JavaPlugin {
     public CommandManager getCommandManager() {
         return commandManager;
     }
-    
-    
 }

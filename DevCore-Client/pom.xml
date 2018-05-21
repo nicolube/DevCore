@@ -50,10 +50,9 @@
                 </executions>
                 <inherited>false</inherited>
             </plugin>
-            <!--plugin>
+            <plugin>  
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${project.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -62,7 +61,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin-->
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -73,12 +72,23 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.8.8</version>
+        </dependency>
         <!--Bukkit API-->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <!--PermissionsEx-->
+        <dependency>
+            <groupId>ru.tehkode</groupId>
+            <artifactId>PermissionsEx</artifactId>
+            <version>1.23.4</version>
         </dependency>
     </dependencies>
 </project>

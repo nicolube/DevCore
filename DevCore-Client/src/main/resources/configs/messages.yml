@@ -9,9 +9,10 @@ chatPrefixes:
     tpa: "&8[&6Tpa&8] &8» &7"
     online: "&8[&6Online&8] &8» &7"
     pay: "&8[&6Pay&8] &8» &7"
-noPermission: "Dazu hast du keine Rechte!"
+noPermission: "&cDazu hast du keine Rechte!"
 player:
-    notFound: "Spieler nicht gefunden!"
+    notFound: "&cSpieler nicht gefunden!"
+    notOnline: "&cSpieler nicht online!"
     
 command:
     helpHeader: 

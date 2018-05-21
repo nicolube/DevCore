@@ -34,6 +34,7 @@ public abstract class SubCommand implements CommandBase {
         this.usageMessage = usageMessage;
         this.aliases = Arrays.asList(aliases);
         this.permission = permission;
+        manager = Main.getPlugin().getCommandManager();
     }
 
     @Override
