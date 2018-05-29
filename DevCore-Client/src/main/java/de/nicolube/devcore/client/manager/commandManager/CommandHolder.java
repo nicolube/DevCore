@@ -1,4 +1,4 @@
-package de.nicolube.devcore.manager.commandManager;
+package de.nicolube.devcore.client.manager.commandManager;
 
 import java.util.HashMap;
 import java.util.Map;

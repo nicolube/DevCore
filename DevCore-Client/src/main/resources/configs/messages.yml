@@ -14,6 +14,10 @@ player:
     notFound: "&cSpieler nicht gefunden!"
     notOnline: "&cSpieler nicht online!"
     
+tablist:
+    header: "&dWelcome to this Server\n"
+    footer: "\n&2Server: &a{server}"
+
 command:
     helpHeader: 
     - "&2-------------&aHelp&2-------------"

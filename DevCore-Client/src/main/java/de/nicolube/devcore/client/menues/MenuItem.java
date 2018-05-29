@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Nico Lube
+ * Copyright (C) 2018 nicolube
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,16 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package de.nicolube.devcore.manager.config;
+package de.nicolube.devcore.client.menues;
 
 /**
  *
- * @author Nico Lube
+ * @author nicolube
  */
-public class ConfigHolder extends BaseHolder {
-
-    public ConfigHolder(String configName, ConfigManager manager) {
-        super(configName, "yml", manager);
-    }
+public class MenuItem {
+    
 }

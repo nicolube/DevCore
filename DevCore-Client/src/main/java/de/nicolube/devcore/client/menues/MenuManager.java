@@ -14,26 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.menues;
-
-import org.bukkit.inventory.ItemStack;
+package de.nicolube.devcore.client.menues;
 
 /**
  *
  * @author nicolube
  */
-public class MenuHolder {
-    private ItemStack[] inventory;
-    private MenuItemExecuter executer;
-
-    public MenuHolder(ItemStack[] inventory) {
-        this.inventory = inventory;
-    }
-
-    protected void setExecuter(MenuItemExecuter executer) {
-        this.executer = executer;
-    }
-    
-    
+public class MenuManager {
     
 }

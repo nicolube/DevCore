@@ -17,7 +17,7 @@
 package de.nicolube.devcore;
 
 
-import de.nicolube.devcore.utils.Scheduler.Scheduler;
+import de.nicolube.devcore.client.Main;
 import de.nicolube.devcore.utils.SystemMessage;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,7 +30,6 @@ public abstract class ModuleBase {
     
     public static Main plugin;
     public static Server server;
-    public static Scheduler scheduler;
     public static FileConfiguration messages;
     
     static {
@@ -42,7 +41,6 @@ public abstract class ModuleBase {
         SystemMessage.INFO.send("Loading BaseModule");
         plugin = Main.getPlugin();
         server = plugin.getServer();
-        scheduler = plugin.getScheduler();
         messages = plugin.getConfigManager().getConfig("messages");
     }
     

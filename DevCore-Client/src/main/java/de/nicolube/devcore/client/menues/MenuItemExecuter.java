@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.menues;
+package de.nicolube.devcore.client.menues;
 
 /**
  *
  * @author nicolube
  */
-public class MenuItem {
-    
+public interface MenuItemExecuter {
+
+    public boolean menuItemExecuter(MenuItem menuItem, String[] args);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 nicolube
+ * Copyright (C) 2018 Nico Lube
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.menues;
+
+package de.nicolube.devcore.client.manager.config;
 
 /**
  *
- * @author nicolube
+ * @author Nico Lube
  */
-public interface MenuItemExecuter {
 
-    public boolean menuItemExecuter(MenuItem menuItem, String[] args);
+public class StorrageHolder extends BaseHolder {
+    
+    public StorrageHolder(String configName, ConfigManager manager) {
+        super(configName, "data", manager);
+    }
+    
 }

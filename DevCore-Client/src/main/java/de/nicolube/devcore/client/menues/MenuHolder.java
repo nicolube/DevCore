@@ -14,23 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.utils;
+package de.nicolube.devcore.client.menues;
 
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  *
  * @author nicolube
  */
-public class ItemUtil {
+public class MenuHolder {
+    private ItemStack[] inventory;
+    private MenuItemExecuter executer;
 
-    public static ItemStack setItemName(ItemStack item, String name) {
-        name = ChatColor.translateAlternateColorCodes('&', name);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
-        item.setItemMeta(meta);
-        return item;
+    public MenuHolder(ItemStack[] inventory) {
+        this.inventory = inventory;
     }
+
+    protected void setExecuter(MenuItemExecuter executer) {
+        this.executer = executer;
+    }
+    
+    
+    
 }

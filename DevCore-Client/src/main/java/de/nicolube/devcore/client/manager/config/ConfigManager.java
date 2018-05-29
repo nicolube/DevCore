@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.manager.config;
+package de.nicolube.devcore.client.manager.config;
 
 import de.nicolube.devcore.LoadClass;
-import de.nicolube.devcore.Main;
+import de.nicolube.devcore.client.Main;
 import de.nicolube.devcore.ModuleBase;
 import java.io.File;
 import java.io.FileOutputStream;

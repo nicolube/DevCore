@@ -16,7 +16,10 @@
  */
 package de.nicolube.devcore;
 
-import de.nicolube.devcore.manager.commandManager.CommandManager;
+import de.nicolube.devcore.client.Main;
+import de.nicolube.devcore.client.manager.commandManager.CommandManager;
+import de.nicolube.devcore.client.playermanager.PlayerManager;
+import de.nicolube.devcore.scoreboard.ScoreBoardUpdater;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.util.HashMap;
 import org.bukkit.plugin.Plugin;
@@ -27,13 +30,14 @@ import org.bukkit.plugin.Plugin;
  */
 public class DevCore {
     private static HashMap<String, CorePlugin> pluginList;
+    private static PlayerManager playerManager;
     
     static {
         pluginList = new HashMap<>();
     }
     
     public static void onDisable() {
-            pluginList.clear();
+        pluginList = new HashMap<>();
     }
     
     public static void registerPlugin(Plugin plugin) {
@@ -44,5 +48,17 @@ public class DevCore {
     
     public static CommandManager getCommandManager() {
         return Main.getPlugin().getCommandManager();
+    }
+    
+    public static void setScoreboardExecuter(ScoreBoardUpdater sbu) {
+       Main.getPlugin().getScoreboards().setScoreBoardUpdater(sbu);
+    }
+
+    public static void setPlayerManager(PlayerManager playerManager) {
+        DevCore.playerManager = playerManager;
+    }
+    
+    public static PlayerManager getPlayerManager() {
+        return playerManager;
     }
 }

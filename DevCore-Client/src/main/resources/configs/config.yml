@@ -1,4 +1,5 @@
 scoreboard:
+    enable: false
     titel: "&cThis is Yours"
     content:
         - "&eYour Rank"

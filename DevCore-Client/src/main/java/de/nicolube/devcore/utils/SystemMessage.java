@@ -16,7 +16,7 @@
  */
 package de.nicolube.devcore.utils;
 
-import de.nicolube.devcore.Main;
+import de.nicolube.devcore.client.Main;
 
 /**
  *

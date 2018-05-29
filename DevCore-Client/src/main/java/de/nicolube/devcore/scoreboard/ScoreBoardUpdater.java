@@ -23,13 +23,16 @@ import org.bukkit.entity.Player;
  * @author Owner
  */
 public abstract class ScoreBoardUpdater {
-    public  Player player;
+
+    public Player player;
 
     public ScoreBoardUpdater(Player player) {
         this.player = player;
-        update();
     }
-    
-   abstract public void update();
-   abstract public String replace(String string);
+
+    public abstract void update();
+
+    public abstract String replace(String string);
+
+    public abstract ScoreBoardUpdater getNewScoreboard(Player player);
 }

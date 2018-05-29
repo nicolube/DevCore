@@ -1,7 +1,7 @@
-package de.nicolube.devcore.manager.commandManager;
+package de.nicolube.devcore.client.manager.commandManager;
 
-import de.nicolube.devcore.Main;
-import de.nicolube.devcore.utils.PlayerMessage;
+import de.nicolube.devcore.client.Main;
+import de.nicolube.devcore.client.utils.PlayerMessage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

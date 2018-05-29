@@ -1,21 +1,21 @@
 package de.nicolube.devcore.scoreboard;
 
 import de.nicolube.devcore.LoadClass;
-import de.nicolube.devcore.Main;
-import de.nicolube.devcore.utils.Reflector;
+import de.nicolube.devcore.client.Main;
+import de.nicolube.devcore.client.utils.Reflector;
 import java.lang.reflect.Field;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Team;
 import ru.tehkode.permissions.PermissionUser;
@@ -57,9 +57,9 @@ public class Tablist implements Listener, LoadClass {
         });
 
     }
-
+    
     @EventHandler
-    private void onJoin(PlayerJoinEvent event) {
+    public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         sendHeaderAndFooter(player);
         PermissionUser permUser = PermissionsEx.getUser(player);
@@ -79,7 +79,7 @@ public class Tablist implements Listener, LoadClass {
     }
 
     @EventHandler
-    private void onQuit(PlayerQuitEvent event) {
+    public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         PermissionUser permUser = PermissionsEx.getUser(player);
         String teamName = permUser.getParentIdentifiers().get(0);

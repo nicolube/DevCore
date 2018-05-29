@@ -1,14 +1,11 @@
 package de.nicolube.devcore.scoreboard;
 
 import de.nicolube.devcore.LoadClass;
-import de.nicolube.devcore.Main;
+import de.nicolube.devcore.client.Main;
 import de.nicolube.devcore.utils.SystemMessage;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,18 +21,28 @@ public class Scoreboards implements Listener, LoadClass {
     private String[] content;
     private String titel;
     private FileConfiguration config;
-    private Class<? extends ScoreBoardUpdater> scoreBoardUpdater;
+    private ScoreBoardUpdater scoreBoardUpdater;
 
     public Scoreboards() {
         load();
     }
-    
+
     @Override
     public void load() {
         SystemMessage.DEBUG.send("Start ScoreBoard Loading");
         this.config = Main.getPlugin().getConfigManager().getConfig("config");
         List<String> list = config.getStringList("scoreboard.content");
         this.content = list.toArray(new String[list.size()]);
+        for (int i = 0; i < content.length; i++) {
+            content[i] = content[i].replace("{rank}", "{r}")
+                    .replace("{online}", "{o}")
+                    .replace("{name}", "{n}")
+                    .replace("{uuid}", "{u}")
+                    .replace("{votecoins}", "{vc}")
+                    .replace("{coins}", "{c}")
+                    .replace("{lastip}", "{li}")
+                    .replace("{ontime}", "{ot}");
+        }
         this.titel = ChatColor.translateAlternateColorCodes('&', config.getString("scoreboard.titel"));
         Bukkit.getPluginManager().registerEvents(this, Main.getPlugin());
         scoreboards.clear();
@@ -54,7 +61,7 @@ public class Scoreboards implements Listener, LoadClass {
     @EventHandler
     private void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        SystemMessage.DEBUG.send("Add ScoreBoard to "+player.getName());
+        SystemMessage.DEBUG.send("Add ScoreBoard to " + player.getName());
         scoreboards.put(player.getUniqueId().toString(), new Scoreboard(player, titel, content));
     }
 
@@ -78,26 +85,11 @@ public class Scoreboards implements Listener, LoadClass {
         scoreboards.get(uuid).update();
     }
 
-    public void setScoreBoardUpdater(Class<? extends ScoreBoardUpdater> scoreBoardUpdater) {
+    public void setScoreBoardUpdater(ScoreBoardUpdater scoreBoardUpdater) {
         this.scoreBoardUpdater = scoreBoardUpdater;
     }
 
     public ScoreBoardUpdater getNewScoreBoardUpdater(Player player) {
-        try {
-            return scoreBoardUpdater.getConstructor(Player.class).newInstance(new Object[]{player});
-        } catch (InstantiationException ex) {
-            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(Scoreboards.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return scoreBoardUpdater != null ? scoreBoardUpdater.getNewScoreboard(player) : null;
     }
 }

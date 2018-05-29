@@ -14,29 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.utils;
 
-import de.nicolube.devcore.LoadClass;
-import de.nicolube.devcore.ModuleBase;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+package de.nicolube.devcore.client.manager.config;
 
 /**
  *
  * @author Nico Lube
  */
-public class PlayerUtils {
-    
-    
-    public static Player getPlayer(String name, CommandSender sender) {
-        Player player = Bukkit.getPlayer(name);
-        if (player != null) {
-            return player;
-        }
-        PlayerMessage.SYSTEM.send(sender, ModuleBase.messages.getString("player.notFound", "Player not found!"));
-        return null;
+public class ConfigHolder extends BaseHolder {
+
+    public ConfigHolder(String configName, ConfigManager manager) {
+        super(configName, "yml", manager);
     }
-    
-    
 }

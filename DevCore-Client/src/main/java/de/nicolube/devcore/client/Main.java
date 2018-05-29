@@ -14,14 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore;
+package de.nicolube.devcore.client;
 
-import de.nicolube.devcore.manager.commandManager.CommandManager;
-import de.nicolube.devcore.manager.config.ConfigManager;
+import de.nicolube.devcore.DevCore;
+import de.nicolube.devcore.client.manager.commandManager.CommandManager;
+import de.nicolube.devcore.client.manager.config.ConfigManager;
+import de.nicolube.devcore.client.playermanager.PlayerData;
+import de.nicolube.devcore.client.playermanager.PlayerManager;
 import de.nicolube.devcore.scoreboard.Scoreboards;
 import de.nicolube.devcore.scoreboard.Tablist;
 import de.nicolube.devcore.utils.SystemMessage;
-import de.nicolube.devcore.utils.Scheduler.Scheduler;
+import java.util.Arrays;
+import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -29,43 +34,53 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Nico Lube
  */
 public class Main extends JavaPlugin {
-    
+
     private static Main plugin;
-    private Scheduler scheduler;
     private ConfigManager configManager;
     private CommandManager commandManager;
     private Scoreboards scoreboards;
     private Tablist tablist;
+    private PlayerManager playerManager;
 
     @Override
     public void onEnable() {
         super.onEnable();
         this.plugin = this;
-
-        SystemMessage.setLogLevel(SystemMessage.NORMAL);
+        
+        SystemMessage.setLogLevel(SystemMessage.ALL);
         logInfoStart();
 
-        SystemMessage.INFO.send("Starting Scheduler");
-        this.scheduler = new Scheduler();
-        
         SystemMessage.INFO.send("Starting ConfigManager");
         this.configManager = new ConfigManager(this);
         this.configManager.addConfig("config");
-        
-        SystemMessage.INFO.send("Starting CommandManager");        
+
+        SystemMessage.INFO.send("Starting CommandManager");
         this.commandManager = new CommandManager();
         
-        SystemMessage.INFO.send("Starting Scorebaords");    
-        this.scoreboards = new Scoreboards();
+        SystemMessage.INFO.send("Init database");
+        try {
+            Main.getPlugin().getDatabase().createQuery(PlayerData.class).findRowCount();
+        } catch (Exception ex) {
+            installDDL();
+        }
         
-        SystemMessage.INFO.send("Starting TabList");    
+        SystemMessage.INFO.send("Starting PlayerManager");
+        this.playerManager = new PlayerManager(plugin);
+        DevCore.setPlayerManager(playerManager);
+        
+        SystemMessage.INFO.send("Starting TabList");
         this.tablist = new Tablist();
+        Bukkit.getPluginManager().registerEvents(tablist, this);
+        
+        if (getConfig().getBoolean("scoreboard.enable")) {
+            SystemMessage.INFO.send("Starting Scorebaords");
+            this.scoreboards = new Scoreboards();
+        }
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
-        scheduler.onDisable();
         DevCore.onDisable();
     }
 
@@ -80,11 +95,7 @@ public class Main extends JavaPlugin {
         SystemMessage.INFO.send("");
         SystemMessage.INFO.send("=======================<>======================");
         SystemMessage.INFO.send("");
-        SystemMessage.INFO.send("Starting... DEBUG Level: "+SystemMessage.getLogLevel());
-    }
-
-    public Scheduler getScheduler() {
-        return scheduler;
+        SystemMessage.INFO.send("Starting... DEBUG Level: " + SystemMessage.getLogLevel());
     }
 
     public ConfigManager getConfigManager() {
@@ -98,6 +109,18 @@ public class Main extends JavaPlugin {
     public Scoreboards getScoreboards() {
         return scoreboards;
     }
+
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    public Tablist getTablist() {
+        return tablist;
+    }
     
-    
+    @Override
+    public List<Class<?>> getDatabaseClasses() {
+        return Arrays.asList(PlayerData.class);
+    }
+
 }
