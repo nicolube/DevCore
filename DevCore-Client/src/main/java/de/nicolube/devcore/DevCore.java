@@ -17,6 +17,7 @@
 package de.nicolube.devcore;
 
 import de.nicolube.devcore.client.Main;
+import de.nicolube.devcore.client.econemy.EconemyManager;
 import de.nicolube.devcore.client.manager.commandManager.CommandManager;
 import de.nicolube.devcore.client.playermanager.PlayerManager;
 import de.nicolube.devcore.scoreboard.ScoreBoardUpdater;
@@ -31,6 +32,8 @@ import org.bukkit.plugin.Plugin;
 public class DevCore {
     private static HashMap<String, CorePlugin> pluginList;
     private static PlayerManager playerManager;
+    private static ServerPinger serverPinger;
+    private static EconemyManager econemyManager;
     
     static {
         pluginList = new HashMap<>();
@@ -61,4 +64,22 @@ public class DevCore {
     public static PlayerManager getPlayerManager() {
         return playerManager;
     }
+
+    public static void setServerPinger(ServerPinger serverPinger) {
+        DevCore.serverPinger = serverPinger;
+    }
+    
+    public static ServerPinger getServerPinger() {
+        return serverPinger;
+    }
+
+    public static EconemyManager getEconemyManager() {
+        return econemyManager;
+    }
+
+    public static void setEconemyManager(EconemyManager econemyManager) {
+        DevCore.econemyManager = econemyManager;
+    }
+    
+    
 }

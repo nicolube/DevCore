@@ -16,8 +16,6 @@
  */
 package de.nicolube.devcore.utils;
 
-import de.nicolube.devcore.client.Main;
-
 /**
  *
  * @author Nico Lube
@@ -35,7 +33,7 @@ public enum SystemMessage {
     private String prefix;
     
     private SystemMessage() {
-        this.prefix = "["+Main.getPlugin().getName()+"] ["+name()+"] ";
+        this.prefix = "[DevCore] ["+name()+"] ";
     }
     
     public void send(String message) {

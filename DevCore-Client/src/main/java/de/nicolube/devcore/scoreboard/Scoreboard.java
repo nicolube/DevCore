@@ -33,7 +33,7 @@ public final class Scoreboard {
         this.player = player;
         this.playerData = Main.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
         this.content = content.clone();
-        this.data = new String[8];
+        this.data = new String[9];
         this.formatter = new DecimalFormat("#0.00");
         this.board = new net.minecraft.server.v1_8_R3.Scoreboard();
         this.objective = board.registerObjective("board", IScoreboardCriteria.c);
@@ -65,7 +65,8 @@ public final class Scoreboard {
         data[4] = playerData.getLastip();                               // last ipaddrass
         data[5] = playerData.getUuid();                                 // players uuid
         data[6] = Long.toString(playerData.getVotecoins());             // votecoins
-        data[7] = formatter.format(playerData.getCoins());    
+        data[7] = formatter.format(playerData.getCoins());              // coins
+        data[8] = Bukkit.getServerName();                               // server-name
         if (scoreboardUpdater != null) {
             for (int i = 0; i < currentContent.length; i++) {
                 currentContent[i] = scoreboardUpdater.replace(currentContent[i]);
@@ -81,6 +82,7 @@ public final class Scoreboard {
                     .replace("{u}", data[5]) // players uuid
                     .replace("{vc}", data[6]) // votecoins
                     .replace("{c}", data[7]) // coins
+                    .replace("{server}", data[8]) // server-name
             );
             currentContent[i] = string;
             if (string.equals(oldList[i])) {

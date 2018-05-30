@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Nico Lube
+ * Copyright (C) 2018 Owner
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,27 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.client.manager.commandManager;
-
-import java.util.HashMap;
-import java.util.Map;
+package de.nicolube.devcore;
 
 /**
  *
  * @author Nico Lube
  */
-public class CommandHolder {
-
-    private Map<String, Command> commandList = new HashMap<>();
-    public void onEnable() {
-        
-    }
+public interface ServerPinger {
     
-    public final void addCommand(Command command) {
-        commandList.put(command.getName(), command);
-    }
-
-    public Map<String, Command> getCommandList() {
-        return commandList;
-    }
+    public PingContainer getPinger(String name);
+    
+    public String addPinger(String address, int port);
 }

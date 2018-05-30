@@ -17,6 +17,9 @@
 package de.nicolube.devcore.client;
 
 import de.nicolube.devcore.DevCore;
+import de.nicolube.devcore.client.econemy.EconemyManager;
+import de.nicolube.devcore.client.econemy.ModelAccount;
+import de.nicolube.devcore.client.econemy.ModelBank;
 import de.nicolube.devcore.client.manager.commandManager.CommandManager;
 import de.nicolube.devcore.client.manager.config.ConfigManager;
 import de.nicolube.devcore.client.playermanager.PlayerData;
@@ -41,32 +44,58 @@ public class Main extends JavaPlugin {
     private Scoreboards scoreboards;
     private Tablist tablist;
     private PlayerManager playerManager;
+    private EconemyManager econemyManager;
 
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        
+        SystemMessage.setLogLevel(SystemMessage.ALL);
+        logInfoStart();
+        
+        SystemMessage.INFO.send("Init Databases");
+        try {
+            getDatabase().createQuery(PlayerData.class).findRowCount();
+            getDatabase().createQuery(ModelAccount.class).findRowCount();
+            getDatabase().createQuery(ModelBank.class).findRowCount();
+        } catch (Exception e) {
+            installDDL();
+        }
+
+        SystemMessage.INFO.send("Starting player manager");
+        this.playerManager = new PlayerManager(plugin);
+        DevCore.setPlayerManager(playerManager);
+        
+        SystemMessage.INFO.send("Starting econemy manager");
+        this.econemyManager = new EconemyManager();
+        DevCore.setEconemyManager(econemyManager);
+        
+    }
+
+    
+    
     @Override
     public void onEnable() {
         super.onEnable();
         this.plugin = this;
         
-        SystemMessage.setLogLevel(SystemMessage.ALL);
         logInfoStart();
-
+        
         SystemMessage.INFO.send("Starting ConfigManager");
         this.configManager = new ConfigManager(this);
         this.configManager.addConfig("config");
-
+        
+        SystemMessage.INFO.send("Starting ServerPinger");
+        DevCore.setServerPinger(new ServerPingerCliant(plugin));
+        
         SystemMessage.INFO.send("Starting CommandManager");
         this.commandManager = new CommandManager();
         
-        SystemMessage.INFO.send("Init database");
-        try {
-            Main.getPlugin().getDatabase().createQuery(PlayerData.class).findRowCount();
-        } catch (Exception ex) {
-            installDDL();
-        }
+        SystemMessage.INFO.send("Register listener for econemy manager");
+        Bukkit.getPluginManager().registerEvents(econemyManager, this);
         
-        SystemMessage.INFO.send("Starting PlayerManager");
-        this.playerManager = new PlayerManager(plugin);
-        DevCore.setPlayerManager(playerManager);
+        SystemMessage.INFO.send("Register listener for player manager");
+        Bukkit.getPluginManager().registerEvents(playerManager, this);
         
         SystemMessage.INFO.send("Starting TabList");
         this.tablist = new Tablist();
@@ -120,7 +149,7 @@ public class Main extends JavaPlugin {
     
     @Override
     public List<Class<?>> getDatabaseClasses() {
-        return Arrays.asList(PlayerData.class);
+        return Arrays.asList(PlayerData.class, ModelBank.class, ModelAccount.class);
     }
 
 }
