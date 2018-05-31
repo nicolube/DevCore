@@ -25,7 +25,11 @@ import org.bukkit.entity.Player;
 public abstract class ScoreBoardUpdater {
 
     public Player player;
-
+    
+    public ScoreBoardUpdater() {
+        
+    }
+    
     public ScoreBoardUpdater(Player player) {
         this.player = player;
     }

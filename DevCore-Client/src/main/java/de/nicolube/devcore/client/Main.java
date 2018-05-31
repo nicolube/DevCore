@@ -49,6 +49,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onLoad() {
         super.onLoad();
+        this.plugin = this;
         
         SystemMessage.setLogLevel(SystemMessage.ALL);
         logInfoStart();

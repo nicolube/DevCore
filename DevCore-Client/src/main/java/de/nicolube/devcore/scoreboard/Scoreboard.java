@@ -50,9 +50,6 @@ public final class Scoreboard {
     }
 
     protected void update() {
-        if (scoreboardUpdater != null) {
-            scoreboardUpdater.update();
-        }
         update(oldContent);
     }
 
@@ -68,8 +65,12 @@ public final class Scoreboard {
         data[7] = formatter.format(playerData.getCoins());              // coins
         data[8] = Bukkit.getServerName();                               // server-name
         if (scoreboardUpdater != null) {
+            scoreboardUpdater.update();
             for (int i = 0; i < currentContent.length; i++) {
-                currentContent[i] = scoreboardUpdater.replace(currentContent[i]);
+                String string = currentContent[i];
+                if (string != null) {
+                    currentContent[i] = scoreboardUpdater.replace(string);
+                }
             }
         }
         for (int i = 0; i < currentContent.length; i++) {
