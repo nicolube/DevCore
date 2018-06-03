@@ -1,4 +1,4 @@
-package de.nicolube.devcore.scoreboard;
+package de.nicolube.devcore.client.scoreboard;
 
 import de.nicolube.devcore.LoadClass;
 import de.nicolube.devcore.client.Main;
@@ -50,6 +50,9 @@ public class Tablist implements Listener, LoadClass {
             Team team = scoreboard.getTeam(teamName);
             if (team == null) {
                 team = scoreboard.registerNewTeam(teamName);
+                team.setAllowFriendlyFire(true);
+                team.setCanSeeFriendlyInvisibles(false);
+                team.setPrefix(teamName);
             }
             p.setPlayerListName(ChatColor.translateAlternateColorCodes('&', permUser.getOption("tab-prefix") + p.getName()));
             team.addEntry(p.getName());

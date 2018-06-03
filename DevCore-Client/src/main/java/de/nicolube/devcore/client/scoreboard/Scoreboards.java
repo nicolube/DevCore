@@ -1,4 +1,4 @@
-package de.nicolube.devcore.scoreboard;
+package de.nicolube.devcore.client.scoreboard;
 
 import de.nicolube.devcore.LoadClass;
 import de.nicolube.devcore.client.Main;
