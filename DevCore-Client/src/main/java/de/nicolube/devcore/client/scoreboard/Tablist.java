@@ -17,6 +17,7 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -60,7 +61,7 @@ public class Tablist implements Listener, LoadClass {
         });
 
     }
-    
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -75,6 +76,8 @@ public class Tablist implements Listener, LoadClass {
         Team team = scoreboard.getTeam(teamName);
         if (team == null) {
             team = scoreboard.registerNewTeam(teamName);
+            team.setAllowFriendlyFire(true);
+            team.setCanSeeFriendlyInvisibles(false);
         }
         player.setPlayerListName(ChatColor.translateAlternateColorCodes('&', permUser.getOption("tab-prefix") + player.getName()));
         team.addEntry(player.getName());

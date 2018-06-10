@@ -17,9 +17,9 @@
 package de.nicolube.devcore;
 
 import de.nicolube.devcore.client.Main;
-import de.nicolube.devcore.client.econemy.EconemyManager;
+import de.nicolube.devcore.client.manager.econemy.EconemyManager;
 import de.nicolube.devcore.client.manager.commandManager.CommandManager;
-import de.nicolube.devcore.client.playermanager.PlayerManager;
+import de.nicolube.devcore.client.manager.playerManager.PlayerManager;
 import de.nicolube.devcore.client.scoreboard.ScoreBoardUpdater;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.util.HashMap;

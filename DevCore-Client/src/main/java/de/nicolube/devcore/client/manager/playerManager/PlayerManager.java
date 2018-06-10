@@ -14,15 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.client.playermanager;
+package de.nicolube.devcore.client.manager.playerManager;
 
 import de.nicolube.devcore.client.Main;
+import de.nicolube.devcore.client.events.PlayerManagerRegisterEvent;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -40,22 +43,25 @@ public class PlayerManager implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onLogin(PlayerLoginEvent event) {
-        Player player = event.getPlayer();
-        String uuid = player.getUniqueId().toString();
-        SystemMessage.DEBUG.send("Check DB from " + player.getName() + ", UUID: " + uuid);
-        PlayerData playerData = this.plugin.getDatabase().find(PlayerData.class)
-                .where()
-                .eq("uuid", uuid)
-                .findUnique();
-        SystemMessage.DEBUG.send("Is table null: " + (playerData == null));
-        if (playerData == null) {
-            playerData = new PlayerData(player, 0, 500, 0);
-            plugin.getDatabase().insert(playerData);
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            Player player = event.getPlayer();
+            String uuid = player.getUniqueId().toString();
+            SystemMessage.DEBUG.send("Check DB from " + player.getName() + ", UUID: " + uuid);
+            PlayerData playerData = this.plugin.getDatabase().find(PlayerData.class)
+                    .where()
+                    .eq("uuid", uuid)
+                    .findUnique();
+            SystemMessage.DEBUG.send("Is table null: " + (playerData == null));
+            if (playerData == null) {
+                playerData = new PlayerData(player, 0, 500, 0);
+                plugin.getDatabase().insert(playerData);
+            }
 
-        playerDataMap.put(player.getUniqueId(), playerData);
+            playerDataMap.put(player.getUniqueId(), playerData);
+            Bukkit.getPluginManager().callEvent(new PlayerManagerRegisterEvent(player, playerData));
+        });
     }
 
     @EventHandler

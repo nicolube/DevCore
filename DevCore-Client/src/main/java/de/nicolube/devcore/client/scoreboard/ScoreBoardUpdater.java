@@ -27,7 +27,6 @@ public abstract class ScoreBoardUpdater {
     public Player player;
     
     public ScoreBoardUpdater() {
-        
     }
     
     public ScoreBoardUpdater(Player player) {

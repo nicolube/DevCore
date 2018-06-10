@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.nicolube.devcore.client.econemy;
+package de.nicolube.devcore.client.manager.econemy;
 
 import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
 import de.nicolube.devcore.DevCore;
 import de.nicolube.devcore.client.Main;
-import de.nicolube.devcore.client.playermanager.PlayerData;
+import de.nicolube.devcore.client.events.PlayerManagerRegisterEvent;
+import de.nicolube.devcore.client.manager.playerManager.PlayerData;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +25,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -82,18 +82,18 @@ public class ModelBank {
         if (accounts.containsKey(uuid)) {
             return true;
         }
-        long pid = DevCore.getPlayerManager().getPlayer(uuid).getId();
         ModelAccount account = plugin.getDatabase().find(ModelAccount.class)
-                .where().eq("user_id", pid).where().eq("bank_id", id)
+                .fetch("data")
+                .where().eq("data.uuid", uuid.toString()).where().eq("bank_id", id)
                 .findUnique();
         return account != null;
     }
 
-    protected void onJoin(PlayerLoginEvent event) {
+    protected void onJoin(PlayerManagerRegisterEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
-        long pid = DevCore.getPlayerManager().getPlayer(uuid).getId();
         ModelAccount account = plugin.getDatabase().find(ModelAccount.class)
-                .where().eq("user_id", pid).where().eq("bank_id", id)
+                .fetch("data")
+                .where().eq("data.uuid", uuid.toString()).where().eq("bank_id", id)
                 .findUnique();
         if (account == null) {
             PlayerData data = DevCore.getPlayerManager().getPlayer(event.getPlayer());
@@ -114,12 +114,9 @@ public class ModelBank {
         if (account != null) {
             return account;
         }
-        PlayerData playerData = DevCore.getPlayerManager().getPlayer(uuid);
-        if (playerData == null) {
-            return null;
-        }
         account = plugin.getDatabase().find(ModelAccount.class)
-                .where().eq("user_id", playerData.getId()).where().eq("bank_id", id)
+                .fetch("data")
+                .where().eq("data.uuid", uuid.toString()).where().eq("bank_id", id)
                 .findUnique();
         return account;
     }

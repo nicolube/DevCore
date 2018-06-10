@@ -1,7 +1,7 @@
 package de.nicolube.devcore.client.scoreboard;
 
 import de.nicolube.devcore.client.Main;
-import de.nicolube.devcore.client.playermanager.PlayerData;
+import de.nicolube.devcore.client.manager.playerManager.PlayerData;
 import de.nicolube.devcore.client.utils.Reflector;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.text.DecimalFormat;

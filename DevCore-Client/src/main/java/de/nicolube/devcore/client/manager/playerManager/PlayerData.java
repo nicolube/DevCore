@@ -14,16 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.nicolube.devcore.client.playermanager;
+package de.nicolube.devcore.client.manager.playerManager;
 
 import com.avaje.ebean.validation.NotEmpty;
 import com.avaje.ebean.validation.NotNull;
 import de.nicolube.devcore.client.Main;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.bukkit.Bukkit;
@@ -34,7 +36,7 @@ import org.bukkit.entity.Player;
  * @author Owner
  */
 
-@Entity
+@Entity(name = "GlobalStats")
 @Table(name = "GlobalStats")
 public class PlayerData implements Serializable {
 

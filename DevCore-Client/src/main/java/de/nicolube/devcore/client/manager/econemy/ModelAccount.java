@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.nicolube.devcore.client.econemy;
+package de.nicolube.devcore.client.manager.econemy;
 
 import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
-import com.avaje.ebean.annotation.Where;
 import de.nicolube.devcore.client.Main;
+import de.nicolube.devcore.client.manager.playerManager.PlayerData;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -16,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
@@ -49,6 +51,9 @@ public class ModelAccount implements Serializable {
 
     @Transient
     private long lastCheckt;
+    
+    @ManyToOne @JoinColumn(name = "id")
+    private PlayerData data;
 
     public ModelAccount() {
         this.lastCheckt = System.currentTimeMillis();
@@ -130,6 +135,14 @@ public class ModelAccount implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public PlayerData getData() {
+        return data;
+    }
+
+    public void setData(PlayerData data) {
+        this.data = data;
+    }
+    
     public void checkUpdate() {
         long cm = System.currentTimeMillis();
         if (lastCheckt + 100 < cm) {
@@ -139,6 +152,7 @@ public class ModelAccount implements Serializable {
     }
 
     public void update() {
+        setUpdatedAt(new Date());
         Main.getPlugin().getDatabase().update(this);
     }
 

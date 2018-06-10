@@ -17,13 +17,13 @@
 package de.nicolube.devcore.client;
 
 import de.nicolube.devcore.DevCore;
-import de.nicolube.devcore.client.econemy.EconemyManager;
-import de.nicolube.devcore.client.econemy.ModelAccount;
-import de.nicolube.devcore.client.econemy.ModelBank;
+import de.nicolube.devcore.client.manager.econemy.EconemyManager;
+import de.nicolube.devcore.client.manager.econemy.ModelAccount;
+import de.nicolube.devcore.client.manager.econemy.ModelBank;
 import de.nicolube.devcore.client.manager.commandManager.CommandManager;
 import de.nicolube.devcore.client.manager.config.ConfigManager;
-import de.nicolube.devcore.client.playermanager.PlayerData;
-import de.nicolube.devcore.client.playermanager.PlayerManager;
+import de.nicolube.devcore.client.manager.playerManager.PlayerData;
+import de.nicolube.devcore.client.manager.playerManager.PlayerManager;
 import de.nicolube.devcore.client.scoreboard.Scoreboards;
 import de.nicolube.devcore.client.scoreboard.Tablist;
 import de.nicolube.devcore.utils.SystemMessage;
@@ -92,11 +92,11 @@ public class Main extends JavaPlugin {
         SystemMessage.INFO.send("Starting CommandManager");
         this.commandManager = new CommandManager();
         
-        SystemMessage.INFO.send("Register listener for econemy manager");
-        Bukkit.getPluginManager().registerEvents(econemyManager, this);
-        
         SystemMessage.INFO.send("Register listener for player manager");
         Bukkit.getPluginManager().registerEvents(playerManager, this);
+        
+        SystemMessage.INFO.send("Register listener for econemy manager");
+        Bukkit.getPluginManager().registerEvents(econemyManager, this);
         
         SystemMessage.INFO.send("Starting TabList");
         this.tablist = new Tablist();
