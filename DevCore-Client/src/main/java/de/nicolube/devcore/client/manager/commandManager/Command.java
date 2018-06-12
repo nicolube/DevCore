@@ -18,6 +18,7 @@ package de.nicolube.devcore.client.manager.commandManager;
 
 import de.nicolube.devcore.client.Main;
 import de.nicolube.devcore.client.utils.PlayerMessage;
+import de.nicolube.devcore.utils.SystemMessage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -170,7 +171,7 @@ public abstract class Command extends BukkitCommand implements CommandBase {
     }
 
     private List<String> filterStartsWith(List<String> list, String filter) {
-        return list.stream().filter(s -> s.startsWith(filter)).collect(Collectors.toList());
+        return list.stream().filter(s -> s.toLowerCase().startsWith(filter)).collect(Collectors.toList());
     }
 
     @Override

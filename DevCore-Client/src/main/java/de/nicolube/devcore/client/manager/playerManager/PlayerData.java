@@ -41,6 +41,7 @@ import org.bukkit.entity.Player;
 public class PlayerData implements Serializable {
 
     @Id
+    @Column(name = "id")
     private long id;
 
     @NotNull

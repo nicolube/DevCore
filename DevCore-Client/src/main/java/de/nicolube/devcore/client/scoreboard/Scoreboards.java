@@ -2,6 +2,7 @@ package de.nicolube.devcore.client.scoreboard;
 
 import de.nicolube.devcore.LoadClass;
 import de.nicolube.devcore.client.Main;
+import de.nicolube.devcore.client.events.AccountRegisterEvent;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.util.HashMap;
 import java.util.List;
@@ -59,10 +60,12 @@ public class Scoreboards implements Listener, LoadClass {
     }
 
     @EventHandler
-    private void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        SystemMessage.DEBUG.send("Add ScoreBoard to " + player.getName());
-        scoreboards.put(player.getUniqueId().toString(), new Scoreboard(player, titel, content));
+    private void onJoin(AccountRegisterEvent event) {
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(), () -> {
+            Player player = event.getPlayer();
+            SystemMessage.DEBUG.send("Add ScoreBoard to " + player.getName());
+            scoreboards.put(player.getUniqueId().toString(), new Scoreboard(player, titel, content));
+        });
     }
 
     @EventHandler

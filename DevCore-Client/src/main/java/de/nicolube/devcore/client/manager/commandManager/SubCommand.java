@@ -44,6 +44,7 @@ public abstract class SubCommand implements CommandBase {
     private final List<String> aliases;
     private final String advanceName;
     private final Main plugin;
+    private List<String> completes;
 
     public SubCommand(String name, String advanceName, String description, String usageMessage, String[] aliases, String permission) {
         this.plugin = Main.getPlugin();
@@ -133,6 +134,9 @@ public abstract class SubCommand implements CommandBase {
 
     @Override
     public List<String> getComplets() {
+        if (completes != null) {
+            return completes;
+        }
         if (subCommands.isEmpty()) {
             return getDefaultComplets(null);
         }
@@ -150,7 +154,7 @@ public abstract class SubCommand implements CommandBase {
     }
 
     private List<String> filterStartsWith(List<String> list, String filter) {
-        return list.stream().filter(s -> s.startsWith(filter)).collect(Collectors.toList());
+        return list.stream().filter(s -> s.toLowerCase().startsWith(filter)).collect(Collectors.toList());
     }
 
     @Override
@@ -195,5 +199,13 @@ public abstract class SubCommand implements CommandBase {
 
     public static void setManager(CommandManager manager) {
         SubCommand.manager = manager;
+    }
+
+    public List<String> getCompletes() {
+        return completes;
+    }
+
+    public void setCompletes(List<String> completes) {
+        this.completes = completes;
     }
 }

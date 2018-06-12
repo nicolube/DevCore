@@ -7,6 +7,7 @@ package de.nicolube.devcore.client.manager.econemy;
 
 import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
+import com.avaje.ebean.annotation.Where;
 import de.nicolube.devcore.client.Main;
 import de.nicolube.devcore.client.manager.playerManager.PlayerData;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
@@ -26,7 +28,8 @@ import javax.persistence.UniqueConstraint;
  *
  * @author Owner
  */
-@Table(name = "accounts", uniqueConstraints = {@UniqueConstraint(columnNames = {"bank_id", "user_id"})})
+@Table(name = "accounts", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"bank_id", "user_id"})})
 @Entity
 public class ModelAccount implements Serializable {
 
@@ -34,7 +37,7 @@ public class ModelAccount implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(name = "user_id")
     private long userId;
 
     @Column()
@@ -51,8 +54,8 @@ public class ModelAccount implements Serializable {
 
     @Transient
     private long lastCheckt;
-    
-    @ManyToOne @JoinColumn(name = "id")
+    @ManyToOne()
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private PlayerData data;
 
     public ModelAccount() {
@@ -142,7 +145,7 @@ public class ModelAccount implements Serializable {
     public void setData(PlayerData data) {
         this.data = data;
     }
-    
+
     public void checkUpdate() {
         long cm = System.currentTimeMillis();
         if (lastCheckt + 100 < cm) {

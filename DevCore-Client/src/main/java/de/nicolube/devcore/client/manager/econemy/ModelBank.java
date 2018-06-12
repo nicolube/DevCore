@@ -9,6 +9,7 @@ import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
 import de.nicolube.devcore.DevCore;
 import de.nicolube.devcore.client.Main;
+import de.nicolube.devcore.client.events.AccountRegisterEvent;
 import de.nicolube.devcore.client.events.PlayerManagerRegisterEvent;
 import de.nicolube.devcore.client.manager.playerManager.PlayerData;
 import de.nicolube.devcore.utils.SystemMessage;
@@ -84,7 +85,7 @@ public class ModelBank {
         }
         ModelAccount account = plugin.getDatabase().find(ModelAccount.class)
                 .fetch("data")
-                .where().eq("data.uuid", uuid.toString()).where().eq("bank_id", id)
+                .where().eq("t1.uuid", uuid.toString()).where().eq("bank_id", id)
                 .findUnique();
         return account != null;
     }
@@ -93,7 +94,7 @@ public class ModelBank {
         UUID uuid = event.getPlayer().getUniqueId();
         ModelAccount account = plugin.getDatabase().find(ModelAccount.class)
                 .fetch("data")
-                .where().eq("data.uuid", uuid.toString()).where().eq("bank_id", id)
+                .where().eq("t1.uuid", uuid.toString()).where().eq("bank_id", id)
                 .findUnique();
         if (account == null) {
             PlayerData data = DevCore.getPlayerManager().getPlayer(event.getPlayer());
@@ -101,6 +102,7 @@ public class ModelBank {
             plugin.getDatabase().insert(account);
         }
         accounts.put(uuid, account);
+        Bukkit.getPluginManager().callEvent(new AccountRegisterEvent(event.getPlayer(), account));
         SystemMessage.DEBUG.send("Add account for " + event.getPlayer().getName());
         SystemMessage.DEBUG.send("Stats: " + account.toString());
     }
@@ -116,7 +118,7 @@ public class ModelBank {
         }
         account = plugin.getDatabase().find(ModelAccount.class)
                 .fetch("data")
-                .where().eq("data.uuid", uuid.toString()).where().eq("bank_id", id)
+                .where().eq("t1.uuid", uuid.toString()).where().eq("bank_id", id)
                 .findUnique();
         return account;
     }
