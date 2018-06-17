@@ -17,7 +17,6 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -43,6 +42,7 @@ public class Tablist implements Listener, LoadClass {
             sendHeaderAndFooter(p);
             PermissionUser permUser = PermissionsEx.getUser(p);
             String teamName = permUser.getParentIdentifiers().get(0);
+            String teamPrefix = ChatColor.translateAlternateColorCodes('&', permUser.getOption("tab-prefix"));
             if (teamName != null) {
                 teamName = permUser.getOption("priority") + teamName;
             } else {
@@ -53,9 +53,9 @@ public class Tablist implements Listener, LoadClass {
                 team = scoreboard.registerNewTeam(teamName);
                 team.setAllowFriendlyFire(true);
                 team.setCanSeeFriendlyInvisibles(false);
-                team.setPrefix(teamName);
+                team.setPrefix(ChatColor.getLastColors(teamPrefix));
             }
-            p.setPlayerListName(ChatColor.translateAlternateColorCodes('&', permUser.getOption("tab-prefix") + p.getName()));
+            p.setPlayerListName(teamPrefix + p.getName());
             team.addEntry(p.getName());
             p.setScoreboard(scoreboard);
         });
@@ -68,6 +68,7 @@ public class Tablist implements Listener, LoadClass {
         sendHeaderAndFooter(player);
         PermissionUser permUser = PermissionsEx.getUser(player);
         String teamName = permUser.getParentIdentifiers().get(0);
+        String teamPrefix = ChatColor.translateAlternateColorCodes('&', permUser.getOption("tab-prefix"));
         if (teamName != null) {
             teamName = permUser.getOption("priority") + teamName;
         } else {
@@ -78,8 +79,9 @@ public class Tablist implements Listener, LoadClass {
             team = scoreboard.registerNewTeam(teamName);
             team.setAllowFriendlyFire(true);
             team.setCanSeeFriendlyInvisibles(false);
+            team.setPrefix(ChatColor.getLastColors(teamPrefix));
         }
-        player.setPlayerListName(ChatColor.translateAlternateColorCodes('&', permUser.getOption("tab-prefix") + player.getName()));
+        player.setPlayerListName(teamPrefix + player.getName());
         team.addEntry(player.getName());
         player.setScoreboard(scoreboard);
     }
