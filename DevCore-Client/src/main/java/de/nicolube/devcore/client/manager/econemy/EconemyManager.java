@@ -27,17 +27,20 @@ public class EconemyManager implements Listener {
     private static Map<String, ModelBank> banks;
     private static DecimalFormat formatter;
 
+    public EconemyManager(Main plugin) {
+        addBank(Bukkit.getServerId(), Bukkit.getServerName(), plugin.getConfigManager().getConfig("config").getDouble("startbalance.main", 0));
+    }
+
     static {
         EconemyManager.banks = new HashMap<>();
         EconemyManager.formatter = new DecimalFormat("#0.00");
-        addBank(Bukkit.getServerId(), Bukkit.getServerName());
     }
 
-    public static void addBank(String name, String alias) {
+    public static void addBank(String name, String alias, double  startBalance) {
         SystemMessage.INFO.send("Add Bank " + name);
         ModelBank bank = Main.getPlugin().getDatabase().find(ModelBank.class).where().eq("name", name).findUnique();
         if (bank == null) {
-            bank = new ModelBank(name, alias);
+            bank = new ModelBank(name, alias, startBalance);
             Main.getPlugin().getDatabase().insert(bank);
         } else {
             bank.setAlias(alias);

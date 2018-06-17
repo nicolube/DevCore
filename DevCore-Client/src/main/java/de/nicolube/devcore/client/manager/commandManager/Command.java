@@ -131,7 +131,7 @@ public abstract class Command extends BukkitCommand implements CommandBase {
             }
             oldCompleter = currentCompleter;
         }
-        return getDefaultComplets(args[args.length-1]);
+        return getDefaultComplets(args[args.length - 1]);
     }
 
     @Override

@@ -7,7 +7,6 @@ package de.nicolube.devcore.client.manager.econemy;
 
 import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
-import com.avaje.ebean.annotation.Where;
 import de.nicolube.devcore.client.Main;
 import de.nicolube.devcore.client.manager.playerManager.PlayerData;
 import java.io.Serializable;
@@ -19,7 +18,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
@@ -54,6 +52,7 @@ public class ModelAccount implements Serializable {
 
     @Transient
     private long lastCheckt;
+    
     @ManyToOne()
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private PlayerData data;
@@ -62,7 +61,7 @@ public class ModelAccount implements Serializable {
         this.lastCheckt = System.currentTimeMillis();
     }
 
-    public ModelAccount(long user_id, long bank_id, long balance) {
+    public ModelAccount(long user_id, long bank_id, double balance) {
         this.lastCheckt = System.currentTimeMillis();
         this.userId = user_id;
         this.bankId = bank_id;

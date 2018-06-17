@@ -47,6 +47,9 @@ public class ModelBank {
     @Column(length = 32)
     private String alias;
 
+    @Column
+    private double startBalance;;
+    
     @CreatedTimestamp
     private Date createdAt;
 
@@ -55,19 +58,21 @@ public class ModelBank {
 
     @Transient
     private final Map<UUID, ModelAccount> accounts;
+    
     @Transient
-    private final JavaPlugin plugin;
+    private final Main plugin;
 
     public ModelBank() {
         this.plugin = Main.getPlugin();
         this.accounts = new HashMap<>();
     }
 
-    public ModelBank(String name, String alias) {
+    public ModelBank(String name, String alias, double startBalance) {
         this.name = name;
         this.alias = alias;
         this.plugin = Main.getPlugin();
         this.accounts = new HashMap<>();
+        this.startBalance = startBalance;
     }
 
     // Econemy
@@ -98,7 +103,7 @@ public class ModelBank {
                 .findUnique();
         if (account == null) {
             PlayerData data = DevCore.getPlayerManager().getPlayer(event.getPlayer());
-            account = new ModelAccount(data.getId(), id, 500);
+            account = new ModelAccount(data.getId(), id, startBalance);
             plugin.getDatabase().insert(account);
         }
         accounts.put(uuid, account);
@@ -148,6 +153,13 @@ public class ModelBank {
         this.alias = alias;
     }
 
+    public double getStartBalance() {
+        return startBalance;
+    }
+
+    public void setStartBalance(double startBalance) {
+        this.startBalance = startBalance;
+    } 
     public Date getCreatedAt() {
         return createdAt;
     }

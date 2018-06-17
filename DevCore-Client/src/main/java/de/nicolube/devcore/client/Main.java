@@ -56,19 +56,23 @@ public class Main extends JavaPlugin {
         
         SystemMessage.INFO.send("Init Databases");
         try {
+            getDatabase().createQuery(ModelBank.class).findRowCount();
             getDatabase().createQuery(PlayerData.class).findRowCount();
             getDatabase().createQuery(ModelAccount.class).findRowCount();
-            getDatabase().createQuery(ModelBank.class).findRowCount();
         } catch (Exception e) {
             installDDL();
         }
+        
+        SystemMessage.INFO.send("Starting ConfigManager");
+        this.configManager = new ConfigManager(this);
+        this.configManager.addConfig("config");
 
         SystemMessage.INFO.send("Starting player manager");
         this.playerManager = new PlayerManager(plugin);
         DevCore.setPlayerManager(playerManager);
         
         SystemMessage.INFO.send("Starting econemy manager");
-        this.econemyManager = new EconemyManager();
+        this.econemyManager = new EconemyManager(plugin);
         DevCore.setEconemyManager(econemyManager);
         
     }
@@ -81,10 +85,6 @@ public class Main extends JavaPlugin {
         this.plugin = this;
         
         logInfoStart();
-        
-        SystemMessage.INFO.send("Starting ConfigManager");
-        this.configManager = new ConfigManager(this);
-        this.configManager.addConfig("config");
         
         SystemMessage.INFO.send("Starting ServerPinger");
         DevCore.setServerPinger(new ServerPingerCliant(plugin));
