@@ -13,12 +13,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class Scoreboards implements Listener, LoadClass {
 
-    private final Map<String, Scoreboard> scoreboards = new HashMap<>();
+    private final Map<String, ScoreBoard> scoreboards = new HashMap<>();
     private String[] content;
     private String titel;
     private FileConfiguration config;
@@ -47,7 +46,11 @@ public class Scoreboards implements Listener, LoadClass {
         this.titel = ChatColor.translateAlternateColorCodes('&', config.getString("scoreboard.titel"));
         Bukkit.getPluginManager().registerEvents(this, Main.getPlugin());
         scoreboards.clear();
-        Bukkit.getOnlinePlayers().forEach(player -> scoreboards.put(player.getUniqueId().toString(), new Scoreboard(player, titel, content)));
+        if (Bukkit.getBukkitVersion().startsWith("1.8")) {
+            Bukkit.getOnlinePlayers().forEach(player -> scoreboards.put(player.getUniqueId().toString(), new ScoreboardV1_8_R3(player, titel, content)));
+        } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
+            Bukkit.getOnlinePlayers().forEach(player -> scoreboards.put(player.getUniqueId().toString(), new ScoreboardV1_12_R1(player, titel, content)));
+        }
         SystemMessage.DEBUG.send("Start Updater for the ScoreBoards");
         autoUpdate();
         SystemMessage.DEBUG.send("End ScoreBoard Loading");
@@ -64,7 +67,11 @@ public class Scoreboards implements Listener, LoadClass {
         Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(), () -> {
             Player player = event.getPlayer();
             SystemMessage.DEBUG.send("Add ScoreBoard to " + player.getName());
-            scoreboards.put(player.getUniqueId().toString(), new Scoreboard(player, titel, content));
+            if (Bukkit.getBukkitVersion().startsWith("1.8")) {
+                scoreboards.put(player.getUniqueId().toString(), new ScoreboardV1_8_R3(player, titel, content));
+            } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
+                scoreboards.put(player.getUniqueId().toString(), new ScoreboardV1_12_R1(player, titel, content));
+            }
         });
     }
 
@@ -83,7 +90,11 @@ public class Scoreboards implements Listener, LoadClass {
     private void update(Player player) {
         String uuid = player.getUniqueId().toString();
         if (!scoreboards.containsKey(uuid)) {
-            scoreboards.put(uuid, new Scoreboard(player, titel, content));
+            if (Bukkit.getBukkitVersion().startsWith("1.8")) {
+                scoreboards.put(uuid, new ScoreboardV1_8_R3(player, titel, content));
+            } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
+                scoreboards.put(uuid, new ScoreboardV1_12_R1(player, titel, content));
+            }
         }
         scoreboards.get(uuid).update();
     }

@@ -27,7 +27,6 @@ import javax.persistence.Transient;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
@@ -124,6 +123,14 @@ public class ModelBank {
         account = plugin.getDatabase().find(ModelAccount.class)
                 .fetch("data")
                 .where().eq("t1.uuid", uuid.toString()).where().eq("bank_id", id)
+                .findUnique();
+        return account;
+    }
+    
+    public ModelAccount getAccount(String name) {
+        ModelAccount account = plugin.getDatabase().find(ModelAccount.class)
+                .fetch("data")
+                .where().eq("t1.name", name).where().eq("bank_id", id)
                 .findUnique();
         return account;
     }

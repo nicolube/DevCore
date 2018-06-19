@@ -16,6 +16,12 @@
  */
 package de.nicolube.devcore.client;
 
+import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.EbeanServerFactory;
+import com.avaje.ebean.config.DataSourceConfig;
+import com.avaje.ebean.config.ServerConfig;
+import com.avaje.ebeaninternal.api.SpiEbeanServer;
+import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import de.nicolube.devcore.DevCore;
 import de.nicolube.devcore.client.manager.econemy.EconemyManager;
 import de.nicolube.devcore.client.manager.econemy.ModelAccount;
@@ -26,10 +32,14 @@ import de.nicolube.devcore.client.manager.playerManager.PlayerData;
 import de.nicolube.devcore.client.manager.playerManager.PlayerManager;
 import de.nicolube.devcore.client.scoreboard.Scoreboards;
 import de.nicolube.devcore.client.scoreboard.Tablist;
+import de.nicolube.devcore.client.scoreboard.TablistV1_12_R1;
+import de.nicolube.devcore.client.scoreboard.TablistV1_8_R3;
 import de.nicolube.devcore.utils.SystemMessage;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -45,24 +55,30 @@ public class Main extends JavaPlugin {
     private Tablist tablist;
     private PlayerManager playerManager;
     private EconemyManager econemyManager;
+    private EbeanServer ebean;
 
     @Override
     public void onLoad() {
         super.onLoad();
         this.plugin = this;
-        
+
         SystemMessage.setLogLevel(SystemMessage.ALL);
         logInfoStart();
         
+        SystemMessage.INFO.send("Setup Databases");
+        setupDB();
+
         SystemMessage.INFO.send("Init Databases");
         try {
             getDatabase().createQuery(ModelBank.class).findRowCount();
             getDatabase().createQuery(PlayerData.class).findRowCount();
             getDatabase().createQuery(ModelAccount.class).findRowCount();
         } catch (Exception e) {
-            installDDL();
+            SpiEbeanServer serv = (SpiEbeanServer) getDatabase();
+            DdlGenerator gen = serv.getDdlGenerator();
+            gen.runScript(false, gen.generateCreateDdl());
         }
-        
+
         SystemMessage.INFO.send("Starting ConfigManager");
         this.configManager = new ConfigManager(this);
         this.configManager.addConfig("config");
@@ -70,38 +86,41 @@ public class Main extends JavaPlugin {
         SystemMessage.INFO.send("Starting player manager");
         this.playerManager = new PlayerManager(plugin);
         DevCore.setPlayerManager(playerManager);
-        
+
         SystemMessage.INFO.send("Starting econemy manager");
         this.econemyManager = new EconemyManager(plugin);
         DevCore.setEconemyManager(econemyManager);
-        
+
     }
 
-    
-    
     @Override
     public void onEnable() {
         super.onEnable();
         this.plugin = this;
-        
+
         logInfoStart();
-        
+
         SystemMessage.INFO.send("Starting ServerPinger");
         DevCore.setServerPinger(new ServerPingerCliant(plugin));
-        
+
         SystemMessage.INFO.send("Starting CommandManager");
         this.commandManager = new CommandManager();
-        
+
         SystemMessage.INFO.send("Register listener for player manager");
         Bukkit.getPluginManager().registerEvents(playerManager, this);
-        
+
         SystemMessage.INFO.send("Register listener for econemy manager");
         Bukkit.getPluginManager().registerEvents(econemyManager, this);
-        
+
         SystemMessage.INFO.send("Starting TabList");
-        this.tablist = new Tablist();
-        Bukkit.getPluginManager().registerEvents(tablist, this);
+        if (Bukkit.getVersion().startsWith("1.8")) {
+            this.tablist = new TablistV1_8_R3();
+        } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
+            this.tablist = new TablistV1_12_R1();
+        }
         
+        Bukkit.getPluginManager().registerEvents(tablist, this);
+
         if (getConfig().getBoolean("scoreboard.enable")) {
             SystemMessage.INFO.send("Starting Scorebaords");
             this.scoreboards = new Scoreboards();
@@ -126,6 +145,8 @@ public class Main extends JavaPlugin {
         SystemMessage.INFO.send("=======================<>======================");
         SystemMessage.INFO.send("");
         SystemMessage.INFO.send("Starting... DEBUG Level: " + SystemMessage.getLogLevel());
+        SystemMessage.INFO.send("Server Version: "+Bukkit.getBukkitVersion());
+        SystemMessage.INFO.send("");
     }
 
     public ConfigManager getConfigManager() {
@@ -148,9 +169,35 @@ public class Main extends JavaPlugin {
         return tablist;
     }
     
-    @Override
+    public EbeanServer getDatabase() {
+        return ebean;
+    }
+
     public List<Class<?>> getDatabaseClasses() {
         return Arrays.asList(PlayerData.class, ModelBank.class, ModelAccount.class);
+    }
+
+    private void setupDB() {
+        YamlConfiguration bukkitYaml = new YamlConfiguration();
+        try {
+            bukkitYaml.load(new File("bukkit.yml"));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        ServerConfig db = new ServerConfig();
+        db.setDefaultServer(false);
+        db.setRegister(false);
+        db.setClasses(getDatabaseClasses());
+        db.setName(Bukkit.getServer().getServerId());
+
+        DataSourceConfig ds = db.getDataSourceConfig();
+        ds.setUrl(bukkitYaml.getString("database.url"));
+        ds.setUsername(bukkitYaml.getString("database.username"));
+        ds.setPassword(bukkitYaml.getString("database.password"));
+        ds.setDriver(bukkitYaml.getString("database.driver"));
+        db.setDataSourceConfig(ds);
+
+        this.ebean = EbeanServerFactory.create(db);
     }
 
 }

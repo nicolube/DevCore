@@ -52,7 +52,7 @@ public class ModelAccount implements Serializable {
 
     @Transient
     private long lastCheckt;
-    
+
     @ManyToOne()
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private PlayerData data;

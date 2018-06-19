@@ -2,8 +2,6 @@ package de.nicolube.devcore.client.scoreboard;
 
 import de.nicolube.devcore.LoadClass;
 import de.nicolube.devcore.client.Main;
-import de.nicolube.devcore.client.utils.Reflector;
-import java.lang.reflect.Field;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,19 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Team;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
-public class Tablist implements Listener, LoadClass {
+public abstract class Tablist implements Listener, LoadClass {
 
-    private FileConfiguration messages;
-    private PacketPlayOutPlayerListHeaderFooter packet;
+    protected FileConfiguration messages;
     private org.bukkit.scoreboard.Scoreboard scoreboard;
 
     public Tablist() {
@@ -99,28 +93,7 @@ public class Tablist implements Listener, LoadClass {
         scoreboard.getTeam(teamName).removeEntry(player.getName());
     }
 
-    private void initHeadderFooter() {
-        String headerText = ChatColor.translateAlternateColorCodes('&', messages.getString("tablist.header").replace("{server}", Bukkit.getServerName()));
-        String footerText = ChatColor.translateAlternateColorCodes('&', messages.getString("tablist.footer").replace("{server}", Bukkit.getServerName()));
-        IChatBaseComponent header = ChatSerializer.a("{'color': '" + "', 'text': '" + headerText + "'}");
-        IChatBaseComponent footer = ChatSerializer.a("{'color': '" + "', 'text': '" + footerText + "'}");
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-        try {
-            Field headerField = packet.getClass().getDeclaredField("a");
-            headerField.setAccessible(true);
-            headerField.set(packet, header);
-            headerField.setAccessible(!headerField.isAccessible());
-            Field footerField = packet.getClass().getDeclaredField("b");
-            footerField.setAccessible(true);
-            footerField.set(packet, footer);
-            footerField.setAccessible(!footerField.isAccessible());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.packet = packet;
-    }
+    abstract protected void initHeadderFooter();
 
-    private void sendHeaderAndFooter(Player p) {
-        Reflector.sendPacket(p, packet);
-    }
+    abstract protected void sendHeaderAndFooter(Player p);
 }

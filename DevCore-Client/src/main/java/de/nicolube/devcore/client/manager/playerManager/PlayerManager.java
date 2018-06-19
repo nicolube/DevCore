@@ -45,6 +45,10 @@ public class PlayerManager implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onLogin(PlayerLoginEvent event) {
+        SystemMessage.DEBUG.send(event.getKickMessage());
+        if (!event.getKickMessage().equals("")) {
+            return;
+        }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Player player = event.getPlayer();
             String uuid = player.getUniqueId().toString();
