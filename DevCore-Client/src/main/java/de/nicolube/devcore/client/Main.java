@@ -113,7 +113,7 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(econemyManager, this);
 
         SystemMessage.INFO.send("Starting TabList");
-        if (Bukkit.getVersion().startsWith("1.8")) {
+        if (Bukkit.getBukkitVersion().startsWith("1.8")) {
             this.tablist = new TablistV1_8_R3();
         } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
             this.tablist = new TablistV1_12_R1();
@@ -197,7 +197,10 @@ public class Main extends JavaPlugin {
         ds.setDriver(bukkitYaml.getString("database.driver"));
         db.setDataSourceConfig(ds);
 
+        ClassLoader previous = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(getClassLoader());
         this.ebean = EbeanServerFactory.create(db);
+        Thread.currentThread().setContextClassLoader(previous);
     }
 
 }
