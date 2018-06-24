@@ -15,7 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -36,7 +35,7 @@ public class EconemyManager implements Listener {
         EconemyManager.formatter = new DecimalFormat("#0.00");
     }
 
-    public static void addBank(String name, String alias, double  startBalance) {
+    public static ModelBank addBank(String name, String alias, double  startBalance) {
         SystemMessage.INFO.send("Add Bank " + name);
         ModelBank bank = Main.getPlugin().getDatabase().find(ModelBank.class).where().eq("name", name).findUnique();
         if (bank == null) {
@@ -46,6 +45,7 @@ public class EconemyManager implements Listener {
             bank.setAlias(alias);
         }
         EconemyManager.banks.put(name, bank);
+        return bank;
     }
 
     public static ModelBank getBank(String name) {
