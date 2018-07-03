@@ -26,7 +26,7 @@ import org.bukkit.command.CommandSender;
  */
 public abstract interface CommandBase
 {
-  public abstract boolean run(CommandSender paramCommandSender, String paramString, String[] paramArrayOfString);
+  public abstract boolean run(CommandSender sender, String alias, String[] args);
   
   public abstract void onEnable();
   

@@ -16,6 +16,10 @@
  */
 package de.nicolube.devcore;
 
+import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.EbeanServerFactory;
+import com.avaje.ebean.config.DataSourceConfig;
+import com.avaje.ebean.config.ServerConfig;
 import de.nicolube.devcore.client.Main;
 import de.nicolube.devcore.client.manager.econemy.EconemyManager;
 import de.nicolube.devcore.client.manager.commandManager.CommandManager;
@@ -23,6 +27,8 @@ import de.nicolube.devcore.client.manager.playerManager.PlayerManager;
 import de.nicolube.devcore.client.scoreboard.ScoreBoardUpdater;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.util.HashMap;
+import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -81,5 +87,25 @@ public class DevCore {
         DevCore.econemyManager = econemyManager;
     }
     
+    public static EbeanServer createEbeanServer(String url, String driver, String username, String password, List<Class<?>> databaseClasses, ClassLoader classLoader) {
+        ServerConfig db = new ServerConfig();
+        db.setDefaultServer(false);
+        db.setRegister(false);
+        db.setClasses(databaseClasses);
+        db.setName("DevCore");
+
+        DataSourceConfig ds = db.getDataSourceConfig();
+        ds.setUrl(url);
+        ds.setUsername(username);
+        ds.setPassword(password);
+        ds.setDriver(driver);
+        db.setDataSourceConfig(ds);
+
+        ClassLoader previous = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(classLoader);
+        EbeanServer ebean = EbeanServerFactory.create(db);
+        Thread.currentThread().setContextClassLoader(previous);
+        return ebean;
+    }
     
 }

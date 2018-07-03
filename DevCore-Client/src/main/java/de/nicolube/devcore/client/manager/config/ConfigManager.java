@@ -36,16 +36,25 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Nico Lube
  */
 public final class ConfigManager implements LoadClass {
-    
+
     private final Map<String, BaseHolder> configList = new HashMap<>();
     private final JavaPlugin plugin;
+    private final File dataFolder;
+    private final String localPath;
 
     public ConfigManager(JavaPlugin plugin) {
-        
         this.plugin = plugin;
+        this.dataFolder = plugin.getDataFolder();
+        this.localPath = "";
         setupConfigs();
-        
         addConfig("messages");
+    }
+
+    public ConfigManager(JavaPlugin plugin, File dataFolder) {
+        this.plugin = plugin;
+        this.dataFolder = dataFolder;
+        this.localPath = dataFolder.getAbsolutePath().replace(plugin.getDataFolder().getAbsolutePath(), "");
+        setupConfigs();
     }
 
     @Override
@@ -67,8 +76,8 @@ public final class ConfigManager implements LoadClass {
     }
 
     private void setupConfigs() {
-        if (!plugin.getDataFolder().exists()) {
-            plugin.getDataFolder().mkdir();
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
         }
         configList.forEach((s, c) -> {
             setupBase(c);
@@ -98,14 +107,13 @@ public final class ConfigManager implements LoadClass {
 
     private void setupBase(BaseHolder c) {
         if (!c.getFile().exists()) {
+            URL url = plugin.getClass().getResource("/configs" + localPath + "/" + c.getName() + "." + c.getFileEnding());
+            if (url == null) {
+                return;
+            }
+            int read = -1;
             try {
                 FileOutputStream out = new FileOutputStream(c.getFile());
-                URL url = plugin.getClass().getResource("/configs/" + c.getName() + "." + c.getFileEnding());
-                if (url == null) {
-                    return;
-                }
-                int read = -1;
-
                 URLConnection connection = url.openConnection();
                 connection.setUseCaches(false);
                 InputStream in = connection.getInputStream();
@@ -124,7 +132,7 @@ public final class ConfigManager implements LoadClass {
     }
 
     public File getConfigFolder() {
-        return plugin.getDataFolder();
+        return dataFolder;
     }
 
     public void reload() {

@@ -9,6 +9,9 @@ chatPrefixes:
     tpa: "&8[&6Tpa&8] &8» &7"
     online: "&8[&6Online&8] &8» &7"
     pay: "&8[&6Pay&8] &8» &7"
+teleport:
+    delay: "Warte &a{delay}&7 sekunden bis zum Teleport."
+    cancel: "Der Teleport wurde abgebrochen da du dich bewegt hast."
 noPermission: "&cDazu hast du keine Rechte!"
 player:
     notFound: "&cSpieler nicht gefunden!"

@@ -56,6 +56,7 @@ public class Main extends JavaPlugin {
     private PlayerManager playerManager;
     private EconemyManager econemyManager;
     private EbeanServer ebean;
+    private Teleporter teleporter;
 
     @Override
     public void onLoad() {
@@ -64,9 +65,20 @@ public class Main extends JavaPlugin {
 
         SystemMessage.setLogLevel(SystemMessage.ALL);
         logInfoStart();
-        
+
         SystemMessage.INFO.send("Setup Databases");
-        setupDB();
+        YamlConfiguration bukkitYaml = new YamlConfiguration();
+        try {
+            bukkitYaml.load(new File("bukkit.yml"));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        this.ebean = DevCore.createEbeanServer(
+                bukkitYaml.getString("database.url"),
+                bukkitYaml.getString("database.driver"),
+                bukkitYaml.getString("database.username"),
+                bukkitYaml.getString("database.password"),
+                getDatabaseClasses(), getClassLoader());
 
         SystemMessage.INFO.send("Init Databases");
         try {
@@ -118,13 +130,16 @@ public class Main extends JavaPlugin {
         } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
             this.tablist = new TablistV1_12_R1();
         }
-        
+
         Bukkit.getPluginManager().registerEvents(tablist, this);
 
         if (getConfig().getBoolean("scoreboard.enable")) {
             SystemMessage.INFO.send("Starting Scorebaords");
             this.scoreboards = new Scoreboards();
         }
+        
+        SystemMessage.INFO.send("Starting Teleporter");
+        this.teleporter = new Teleporter(plugin);
     }
 
     @Override
@@ -145,7 +160,7 @@ public class Main extends JavaPlugin {
         SystemMessage.INFO.send("=======================<>======================");
         SystemMessage.INFO.send("");
         SystemMessage.INFO.send("Starting... DEBUG Level: " + SystemMessage.getLogLevel());
-        SystemMessage.INFO.send("Server Version: "+Bukkit.getBukkitVersion());
+        SystemMessage.INFO.send("Server Version: " + Bukkit.getBukkitVersion());
         SystemMessage.INFO.send("");
     }
 
@@ -168,39 +183,13 @@ public class Main extends JavaPlugin {
     public Tablist getTablist() {
         return tablist;
     }
-    
+
     public EbeanServer getDatabase() {
         return ebean;
     }
 
     public List<Class<?>> getDatabaseClasses() {
         return Arrays.asList(PlayerData.class, ModelBank.class, ModelAccount.class);
-    }
-
-    private void setupDB() {
-        YamlConfiguration bukkitYaml = new YamlConfiguration();
-        try {
-            bukkitYaml.load(new File("bukkit.yml"));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        ServerConfig db = new ServerConfig();
-        db.setDefaultServer(false);
-        db.setRegister(false);
-        db.setClasses(getDatabaseClasses());
-        db.setName(Bukkit.getServer().getServerId());
-
-        DataSourceConfig ds = db.getDataSourceConfig();
-        ds.setUrl(bukkitYaml.getString("database.url"));
-        ds.setUsername(bukkitYaml.getString("database.username"));
-        ds.setPassword(bukkitYaml.getString("database.password"));
-        ds.setDriver(bukkitYaml.getString("database.driver"));
-        db.setDataSourceConfig(ds);
-
-        ClassLoader previous = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(getClassLoader());
-        this.ebean = EbeanServerFactory.create(db);
-        Thread.currentThread().setContextClassLoader(previous);
     }
 
 }
