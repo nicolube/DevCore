@@ -17,17 +17,17 @@
 package de.nicolube.devcore.client.utils;
 
 import java.lang.reflect.Field;
-import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_9_R1.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
  *
  * @author nicolube
  */
-public class Reflectorv1_8_8 {
+public class Reflectorv1_9_R1 {
     public static void sendPacket(Packet packet) {
         Bukkit.getOnlinePlayers().forEach(player -> sendPacket(player, packet));
     }

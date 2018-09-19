@@ -1,9 +1,9 @@
 package de.nicolube.devcore.client.scoreboard;
 
-import de.nicolube.devcore.client.utils.Reflectorv1_8_8;
+import de.nicolube.devcore.client.utils.Reflectorv1_12_R1;
 import java.lang.reflect.Field;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent;
+import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
  *
  * @author Nico Lube
  */
-public class TablistV1_8_R3 extends Tablist {
+public class TablistV1_12_R1 extends Tablist {
     
     private PacketPlayOutPlayerListHeaderFooter packet;
     
@@ -37,8 +37,8 @@ public class TablistV1_8_R3 extends Tablist {
     protected void initHeadderFooter() {
         String headerText = ChatColor.translateAlternateColorCodes('&', messages.getString("tablist.header").replace("{server}", Bukkit.getServerName()));
         String footerText = ChatColor.translateAlternateColorCodes('&', messages.getString("tablist.footer").replace("{server}", Bukkit.getServerName()));
-        IChatBaseComponent header = IChatBaseComponent.ChatSerializer.a("{'color': '" + "', 'text': '" + headerText + "'}");
-        IChatBaseComponent footer = IChatBaseComponent.ChatSerializer.a("{'color': '" + "', 'text': '" + footerText + "'}");
+        IChatBaseComponent header = IChatBaseComponent.ChatSerializer.a(footerText.isEmpty() ? "{\"translate\":\"\"}" : "{\"text\":\""+headerText+"\"}");
+        IChatBaseComponent footer = IChatBaseComponent.ChatSerializer.a(footerText.isEmpty() ? "{\"translate\":\"\"}" : "{\"text\":\""+footerText+"\"}");
         PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
         try {
             Field headerField = packet.getClass().getDeclaredField("a");
@@ -57,7 +57,7 @@ public class TablistV1_8_R3 extends Tablist {
     
     @Override
     protected void sendHeaderAndFooter(Player p) {
-        Reflectorv1_8_8.sendPacket(p, packet);
+        Reflectorv1_12_R1.sendPacket(p, packet);
     }
     
 }

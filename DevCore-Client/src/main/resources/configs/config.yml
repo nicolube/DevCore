@@ -1,6 +1,0 @@
-scoreboard:
-    enable: false
-    titel: "&cThis is Yours"
-    content:
-        - "&eYour Rank"
-        - "&6{rank}"

@@ -19,6 +19,7 @@ package de.nicolube.devcore.client.manager.config;
 import de.nicolube.devcore.LoadClass;
 import de.nicolube.devcore.client.Main;
 import de.nicolube.devcore.ModuleBase;
+import de.nicolube.devcore.utils.SystemMessage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -136,6 +137,7 @@ public final class ConfigManager implements LoadClass {
     }
 
     public void reload() {
+        SystemMessage.INFO.send("[ConfigManager] Reload configs for "+plugin.getName());
         configList.forEach((key, config) -> {
             config.load();
         });

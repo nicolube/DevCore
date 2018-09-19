@@ -20,7 +20,12 @@ package de.nicolube.devcore.client.manager.config;
  *
  * @author Nico Lube
  */
+import de.nicolube.devcore.utils.SystemMessage;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -35,12 +40,23 @@ public abstract class BaseHolder {
         this.configManager = configManager;
         this.file = new File(configManager.getConfigFolder(), configName + "."+ fileEnding);
         this.fileEnding = fileEnding;
+        this.
         load();
         this.configName = configName;
     }
 
     public final void load() {
-        config = YamlConfiguration.loadConfiguration(file);
+        try {
+            config.load(file);
+            SystemMessage.DEBUG.send("[ConfigManager] Reload "+file.getName());
+        } catch (NullPointerException ex) {
+            SystemMessage.DEBUG.send("[ConfigManager] Load "+file.getName());
+            config = YamlConfiguration.loadConfiguration(file);
+        } catch (IOException ex) {
+            Logger.getLogger(BaseHolder.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidConfigurationException ex) {
+            Logger.getLogger(BaseHolder.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public File getFile() {

@@ -48,6 +48,8 @@ public class Scoreboards implements Listener, LoadClass {
         scoreboards.clear();
         if (Bukkit.getBukkitVersion().startsWith("1.8")) {
             Bukkit.getOnlinePlayers().forEach(player -> scoreboards.put(player.getUniqueId().toString(), new ScoreboardV1_8_R3(player, titel, content)));
+        } else if (Bukkit.getBukkitVersion().startsWith("1.9")) {
+            Bukkit.getOnlinePlayers().forEach(player -> scoreboards.put(player.getUniqueId().toString(), new ScoreboardV1_9_R1(player, titel, content)));
         } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
             Bukkit.getOnlinePlayers().forEach(player -> scoreboards.put(player.getUniqueId().toString(), new ScoreboardV1_12_R1(player, titel, content)));
         }

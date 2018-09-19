@@ -17,9 +17,6 @@
 package de.nicolube.devcore.client;
 
 import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.EbeanServerFactory;
-import com.avaje.ebean.config.DataSourceConfig;
-import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import de.nicolube.devcore.DevCore;
@@ -34,6 +31,7 @@ import de.nicolube.devcore.client.scoreboard.Scoreboards;
 import de.nicolube.devcore.client.scoreboard.Tablist;
 import de.nicolube.devcore.client.scoreboard.TablistV1_12_R1;
 import de.nicolube.devcore.client.scoreboard.TablistV1_8_R3;
+import de.nicolube.devcore.client.scoreboard.TablistV1_9_R1;
 import de.nicolube.devcore.utils.SystemMessage;
 import java.io.File;
 import java.util.Arrays;
@@ -127,10 +125,13 @@ public class Main extends JavaPlugin {
         SystemMessage.INFO.send("Starting TabList");
         if (Bukkit.getBukkitVersion().startsWith("1.8")) {
             this.tablist = new TablistV1_8_R3();
-        } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
+        } else if (Bukkit.getBukkitVersion().startsWith("1.9")) {
+            this.tablist = new TablistV1_9_R1();
+        }
+        else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
             this.tablist = new TablistV1_12_R1();
         }
-
+        
         Bukkit.getPluginManager().registerEvents(tablist, this);
 
         if (getConfig().getBoolean("scoreboard.enable")) {

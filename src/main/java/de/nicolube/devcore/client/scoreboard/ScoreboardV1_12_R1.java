@@ -1,6 +1,6 @@
 package de.nicolube.devcore.client.scoreboard;
 
-import de.nicolube.devcore.client.utils.Reflectorv1_12_2;
+import de.nicolube.devcore.client.utils.Reflectorv1_12_R1;
 import net.minecraft.server.v1_12_R1.IScoreboardCriteria;
 import net.minecraft.server.v1_12_R1.PacketPlayOutScoreboardDisplayObjective;
 import org.bukkit.entity.Player;
@@ -22,8 +22,8 @@ public final class ScoreboardV1_12_R1 extends ScoreBoard {
 
         final PacketPlayOutScoreboardObjective objectivPacket = new PacketPlayOutScoreboardObjective(objective, 0);
         final PacketPlayOutScoreboardDisplayObjective display = new PacketPlayOutScoreboardDisplayObjective(1, objective);
-        Reflectorv1_12_2.sendPacket(player, objectivPacket);
-        Reflectorv1_12_2.sendPacket(player, display);
+        Reflectorv1_12_R1.sendPacket(player, objectivPacket);
+        Reflectorv1_12_R1.sendPacket(player, display);
 
         update(new String[content.length]);
     }
@@ -31,13 +31,13 @@ public final class ScoreboardV1_12_R1 extends ScoreBoard {
     @Override
     protected void removeScore(String string) {
         final PacketPlayOutScoreboardScore packet = new PacketPlayOutScoreboardScore(string);
-        Reflectorv1_12_2.sendPacket(player, packet);
+        Reflectorv1_12_R1.sendPacket(player, packet);
     }
 
     @Override
     protected void addScore(String string, int score) {
         final ScoreboardScore sScore = new ScoreboardScore(board, objective, string);
         sScore.setScore(score);
-        Reflectorv1_12_2.sendPacket(player, new PacketPlayOutScoreboardScore(sScore));
+        Reflectorv1_12_R1.sendPacket(player, new PacketPlayOutScoreboardScore(sScore));
     }
 }

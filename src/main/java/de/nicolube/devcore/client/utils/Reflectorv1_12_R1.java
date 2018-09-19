@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
  *
  * @author nicolube
  */
-public class Reflectorv1_12_2 {
+public class Reflectorv1_12_R1 {
     public static void sendPacket(Packet packet) {
         Bukkit.getOnlinePlayers().forEach(player -> sendPacket(player, packet));
     }

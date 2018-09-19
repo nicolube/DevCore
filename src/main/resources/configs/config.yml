@@ -1,0 +1,13 @@
+scoreboard:
+    enable: false
+    titel: "&cThis is Yours"
+    content:
+        - "&eYour Rank"
+        - "&6{rank}"
+tablist:
+    headerFooter: false
+    prefixes: false
+    
+teleport:
+    #Delay in secunds
+    delay: 5

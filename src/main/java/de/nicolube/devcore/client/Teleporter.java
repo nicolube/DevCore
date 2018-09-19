@@ -36,7 +36,7 @@ public class Teleporter {
     public Teleporter(Main plugin) {
         this.plugin = plugin;
         this.messages = plugin.getConfigManager().getConfig("messages");
-        this.delay = plugin.getConfigManager().getConfig("config").getInt("double");
+        this.delay = plugin.getConfigManager().getConfig("config").getInt("teleport.delay");
 
     }
 

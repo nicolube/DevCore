@@ -2,19 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.nicolube</groupId>
-    <artifactId>DevCore-Client</artifactId>
-    <version>1.8.8_1.12.2-1.4</version>
+    <artifactId>DevCore</artifactId>
+    <version>1.5</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    <name>DevCore-Client</name>
+    <name>DevCore</name>
     <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
     <build>
@@ -80,9 +84,35 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <ignoreMissingFile>false</ignoreMissingFile>
+                    <file>${project.build.directory}/classes/plugin.yml</file>
+                    <replacements>
+                        <replacement>
+                            <token>%PROJECT_VERSION%</token>
+                            <value>${project.version}</value>
+                        </replacement>
+                        <replacement>
+                            <token>%PROJECT_NAME%</token>
+                            <value>${project.name}</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-    
     <dependencies>
         
         <!--Spigot API 1.8.8-->
@@ -119,11 +149,25 @@
             <version>1.12.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!--Spigot API 1.12.1-->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.9.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
         <!--Bukkit API 1.12.1-->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.12.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.12-SNAPSHOT</version>
+            <type>jar</type>
             <scope>provided</scope>
         </dependency>
         <!--PermissionsEx 1.23.4-->
