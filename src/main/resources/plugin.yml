@@ -1,0 +1,4 @@
+author: nicolube
+main: de.nicolube.devcore.client.Main
+version: %PROJECT_VERSION%
+name: %PROJECT_NAME%
