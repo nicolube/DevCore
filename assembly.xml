@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <unpack>true</unpack>
             <includes>
                 <include>org.avaje:ebean</include>
-                <include>de.nicolube:DevCore-Client</include>
+                <include>de.nicolube:DevCore</include>
                 <include>javax.persistence:persistence-api</include>
             </includes>
         </dependencySet>

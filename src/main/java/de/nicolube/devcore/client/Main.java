@@ -68,25 +68,26 @@ public class Main extends JavaPlugin {
         YamlConfiguration bukkitYaml = new YamlConfiguration();
         try {
             bukkitYaml.load(new File("bukkit.yml"));
+            this.ebean = DevCore.createEbeanServer(
+                    bukkitYaml.getString("database.url"),
+                    bukkitYaml.getString("database.driver"),
+                    bukkitYaml.getString("database.username"),
+                    bukkitYaml.getString("database.password"),
+                    getDatabaseClasses(), getClassLoader());
+
+            SystemMessage.INFO.send("Init Databases");
+            try {
+                getDatabase().createQuery(ModelBank.class).findRowCount();
+                getDatabase().createQuery(PlayerData.class).findRowCount();
+                getDatabase().createQuery(ModelAccount.class).findRowCount();
+            } catch (Exception e) {
+                SpiEbeanServer serv = (SpiEbeanServer) getDatabase();
+                DdlGenerator gen = serv.getDdlGenerator();
+                gen.runScript(false, gen.generateCreateDdl());
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        this.ebean = DevCore.createEbeanServer(
-                bukkitYaml.getString("database.url"),
-                bukkitYaml.getString("database.driver"),
-                bukkitYaml.getString("database.username"),
-                bukkitYaml.getString("database.password"),
-                getDatabaseClasses(), getClassLoader());
-
-        SystemMessage.INFO.send("Init Databases");
-        try {
-            getDatabase().createQuery(ModelBank.class).findRowCount();
-            getDatabase().createQuery(PlayerData.class).findRowCount();
-            getDatabase().createQuery(ModelAccount.class).findRowCount();
-        } catch (Exception e) {
-            SpiEbeanServer serv = (SpiEbeanServer) getDatabase();
-            DdlGenerator gen = serv.getDdlGenerator();
-            gen.runScript(false, gen.generateCreateDdl());
+            SystemMessage.INFO.send("Setup Databases Faild");
         }
 
         SystemMessage.INFO.send("Starting ConfigManager");
@@ -127,18 +128,17 @@ public class Main extends JavaPlugin {
             this.tablist = new TablistV1_8_R3();
         } else if (Bukkit.getBukkitVersion().startsWith("1.9")) {
             this.tablist = new TablistV1_9_R1();
-        }
-        else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
+        } else if (Bukkit.getBukkitVersion().startsWith("1.12")) {
             this.tablist = new TablistV1_12_R1();
         }
-        
+
         Bukkit.getPluginManager().registerEvents(tablist, this);
 
         if (getConfig().getBoolean("scoreboard.enable")) {
             SystemMessage.INFO.send("Starting Scorebaords");
             this.scoreboards = new Scoreboards();
         }
-        
+
         SystemMessage.INFO.send("Starting Teleporter");
         this.teleporter = new Teleporter(plugin);
     }
